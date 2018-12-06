@@ -1,6 +1,4 @@
-package calabashBrothers;
-
-import calabashBrothers.beings.Creature;
+package calabashBrothers.GUI;
 
 /**
  * @ Author     ：Young

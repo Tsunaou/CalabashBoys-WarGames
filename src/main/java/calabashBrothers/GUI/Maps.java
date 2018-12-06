@@ -1,8 +1,5 @@
-package calabashBrothers;
+package calabashBrothers.GUI;
 
-import calabashBrothers.beings.Creature;
-
-import javax.swing.*;
 import java.util.ArrayList;
 
 /**

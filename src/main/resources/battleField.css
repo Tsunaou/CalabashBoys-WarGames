@@ -1,0 +1,6 @@
+.root {
+    -fx-background-image: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1543289084&di=28b21562ae5c5537daefb0b0991ce58a&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.41188.com%2Fupload%2Fueditor%2F20180104%2F5a4de03dbe010.jpg");
+}
+.label {
+    -fx-font-size: 20;
+}

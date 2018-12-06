@@ -1,4 +1,4 @@
-package calabashBrothers;
+package calabashBrothers.GUI;
 
 /**
  * @ Author     ：Young

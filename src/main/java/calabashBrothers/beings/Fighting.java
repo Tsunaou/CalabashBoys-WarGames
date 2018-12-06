@@ -1,6 +1,6 @@
 package calabashBrothers.beings;
 
-import calabashBrothers.Maps;
+import calabashBrothers.GUI.Maps;
 
 /**
  * @ Author     ：Young

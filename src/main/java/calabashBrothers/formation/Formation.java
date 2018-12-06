@@ -1,7 +1,7 @@
 package calabashBrothers.formation;
 
-import calabashBrothers.Coordinate;
-import calabashBrothers.Maps;
+import calabashBrothers.GUI.Coordinate;
+import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.Creature;
 
 import java.util.ArrayList;

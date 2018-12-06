@@ -1,6 +1,6 @@
 package calabashBrothers.formation;
 
-import calabashBrothers.Maps;
+import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.Creature;
 
 import java.util.ArrayList;
