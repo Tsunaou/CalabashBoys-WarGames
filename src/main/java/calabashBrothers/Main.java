@@ -15,10 +15,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
-        System.out.println(getClass().getClassLoader().getResource("battleField.fxml"));
+        //setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("battleField.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 600.0D, 500.0D));
+        primaryStage.setTitle("葫芦娃vs妖精");
+        primaryStage.setScene(new Scene(root, 1200.0D, 800.0D)); //设置初始的窗口大小
         primaryStage.show();
     }
 

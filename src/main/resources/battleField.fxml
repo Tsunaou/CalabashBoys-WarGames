@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
@@ -10,25 +14,81 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<GridPane alignment="center" hgap="10" stylesheets="/battleField.css" vgap="10"
-          xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-          fx:controller="calabashBrothers.GUI.BattleFieldController">
-    <children>
-        <Button onAction="#sayHelloWorld" text="Say 'Hello World'" GridPane.columnIndex="1" />
-        <Label fx:id="helloWorld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <Arc fill="DODGERBLUE" length="270.0" radiusX="100.0" radiusY="100.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.rowIndex="1" />
-        <ParallelCamera GridPane.rowIndex="1" />
-        <AmbientLight color="CHARTREUSE" lightOn="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <PointLight color="CHARTREUSE" lightOn="true" GridPane.rowIndex="1" />
-    </children>
-    <columnConstraints>
-        <ColumnConstraints />
-        <ColumnConstraints />
-        <ColumnConstraints />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-    </rowConstraints>
-</GridPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="/battleField.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calabashBrothers.GUI.BattleFieldController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="文件">
+            <items>
+              <MenuItem mnemonicParsing="false" text="打开" />
+                  <MenuItem mnemonicParsing="false" text="保存" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="帮助">
+            <items>
+              <MenuItem mnemonicParsing="false" text="使用说明" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="关于">
+            <items>
+              <MenuItem mnemonicParsing="false" text="关于本程序" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <VBox prefHeight="722.0" prefWidth="194.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane prefHeight="49.0" prefWidth="194.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="20.0" prefWidth="89.0" text="时间：">
+                     <font>
+                        <Font name="System Italic" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="20.0" prefWidth="100.0" text="Time" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Label text="阵型选择">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <ChoiceBox prefHeight="30.0" prefWidth="204.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="5.0" />
+               </VBox.margin>
+            </ChoiceBox>
+            <Label text="速度选择">
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Slider showTickLabels="true" showTickMarks="true" value="50.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="5.0" />
+               </VBox.margin>
+            </Slider>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="30.0" left="10.0" top="15.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <center>
+      <Canvas id="mainCanvas" fx:id="mainCanvas" height="720.0" width="720.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
