@@ -16,6 +16,8 @@ import java.util.Random;
 
 public class Creature extends Beings implements Runnable, Config {
 
+    private double HP;
+
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
 
     public Creature(String name) {
@@ -68,8 +70,8 @@ public class Creature extends Beings implements Runnable, Config {
             synchronized (maps){
                 //System.out.println("run:"+this.toString());
                 moveRandom();
-                //maps.showMaps();
             }
+            beingSleep(1000);
         }
     }
 }

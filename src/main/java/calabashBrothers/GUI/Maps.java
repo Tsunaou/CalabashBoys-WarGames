@@ -142,6 +142,7 @@ public class Maps<T extends Creature> implements Config{
             System.out.println(" ");
         }
         System.out.println(" ");
+        System.out.println(" ");
     }
 
     public void removeMaps(){

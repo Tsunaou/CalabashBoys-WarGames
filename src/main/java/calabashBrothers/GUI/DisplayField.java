@@ -13,6 +13,7 @@ public class DisplayField implements Runnable{
 
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
     private boolean Running = true;
+    private boolean firstDisplay = true;
 
     public static Maps<Creature> getMaps() {
         return maps;
@@ -43,16 +44,17 @@ public class DisplayField implements Runnable{
         while (Running){
             synchronized (maps){
                 maps.showMaps();
+                if(firstDisplay){
+                    displaySleep(3);
+                    firstDisplay = false;
+                }
             }
-            displaySleep(1000);
+            displaySleep(3000);
         }
     }
 
     public void run(){
         display();
     }
-
-
-
 
 }

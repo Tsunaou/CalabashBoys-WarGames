@@ -150,7 +150,6 @@ public class BattleFieldController implements Config{
                 exec.execute(c);
             }
         }
-
         exec.shutdown();
     }
 

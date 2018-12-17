@@ -4,6 +4,7 @@ import calabashBrothers.GUI.Coordinate;
 import calabashBrothers.GUI.unit;
 
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ Author     ：Young
@@ -40,6 +41,14 @@ public class Beings {
 
     public Coordinate getLocation() {
         return location;
+    }
+
+    public void beingSleep(int ms){
+        try{
+            TimeUnit.MILLISECONDS.sleep(ms);
+        }catch (InterruptedException e){
+            System.out.println(e.toString());
+        }
     }
 }
 
