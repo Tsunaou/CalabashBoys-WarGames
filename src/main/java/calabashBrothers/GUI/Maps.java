@@ -36,6 +36,7 @@ public class Maps<T extends Creature> implements Config{
         Maps.UnitSize = canvasHeight/Height;
         assert(UnitSize != canvasWidth/Width);
         System.out.println("Canvas:Heitht="+canvasHeight+",Width="+canvasWidth);
+        gc = battleFiledCanvas.getGraphicsContext2D();
     }
 
     public Maps(int rows, int cols) {
@@ -92,11 +93,13 @@ public class Maps<T extends Creature> implements Config{
 
     public void showMaps(){
 
+        gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
+
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
-                    gc.drawImage(new Image(tmp.getFilePath().toString()),i*UnitSize,j*UnitSize,UnitSize,UnitSize);
+                    gc.drawImage(new Image(tmp.getFilePath().toString()),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
                     switch (tmp.getClass().getSimpleName()){
                         case "CalabashBoy":{
                             System.out.print("C");

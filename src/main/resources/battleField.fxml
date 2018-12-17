@@ -24,6 +24,15 @@
                   <MenuItem mnemonicParsing="false" text="保存" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="阵型选择">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#formation1" text="长蛇 vs 偃月" />
+                  <MenuItem mnemonicParsing="false" onAction="#formation2" text="长蛇 vs 鱼鳞" />
+                  <MenuItem mnemonicParsing="false" onAction="#formation3" text="衝轭 vs 鱼鳞" />
+                  <MenuItem mnemonicParsing="false" onAction="#formation4" text="鹤翼 vs 锋矢" />
+                  <MenuItem mnemonicParsing="false" onAction="#formation5" text="雁行 vs 方円" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="帮助">
             <items>
               <MenuItem mnemonicParsing="false" text="使用说明" />
@@ -62,16 +71,16 @@
                   <Insets bottom="10.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Label text="阵型选择">
+            <Label text="初始阵型选择">
                <VBox.margin>
                   <Insets bottom="5.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <ChoiceBox prefHeight="30.0" prefWidth="204.0">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="5.0" />
-               </VBox.margin>
-            </ChoiceBox>
+            <Label fx:id="initFormationText" prefHeight="36.0" prefWidth="182.0" text="长蛇 vs 偃月">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
             <Label text="速度选择">
                <VBox.margin>
                   <Insets bottom="5.0" top="10.0" />
