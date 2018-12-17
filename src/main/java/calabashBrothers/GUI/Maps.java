@@ -1,15 +1,42 @@
 package calabashBrothers.GUI;
 
+import calabashBrothers.beings.Creature;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 /**
  * @ Author     ：Young
  * @ Description：战场的地图，二维平面，每个点是一个Unit
  */
-public class Maps<T> {
+public class Maps<T extends Creature> implements Config{
     private int rows;
     private int cols;
     private ArrayList<ArrayList<unit<T>>> maps; //用容器表示二维数组，再加上泛型的unit，有点复杂感觉
+
+    private static Canvas battleFiledCanvas;
+    private static GraphicsContext gc;     //2D画布
+    private static double canvasHeight;   //画布的高度
+    private static double canvasWidth;    //画布的宽度
+    private static double UnitSize;       //单位宽度
+
+
+    public static Canvas getBattleFiledCanvas() {
+        return battleFiledCanvas;
+    }
+
+    public static void setBattleFiledCanvas(Canvas battleFiledCanvas) {
+        Maps.battleFiledCanvas = battleFiledCanvas;
+        //基本参数
+        Maps.canvasHeight = battleFiledCanvas.getHeight();
+        Maps.canvasWidth = battleFiledCanvas.getWidth();
+        Maps.UnitSize = canvasHeight/Height;
+        assert(UnitSize != canvasWidth/Width);
+        System.out.println("Canvas:Heitht="+canvasHeight+",Width="+canvasWidth);
+    }
 
     public Maps(int rows, int cols) {
         this.rows = rows;
@@ -43,16 +70,33 @@ public class Maps<T> {
         maps.get(x).get(y).setContent(content);
     }
 
-
     public ArrayList<ArrayList<unit<T>>> getMaps() {
         return maps;
     }
 
+    public void drawBoradLines(){
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0,0,canvasWidth,canvasHeight);
+        gc.setFill(Color.BLACK);
+        gc.setLineWidth(5);
+
+        //绘制N*N的边界线
+        for(int i=1;i<Height;i++){
+            gc.strokeLine(i*UnitSize,0,i*UnitSize,canvasWidth);
+        }
+
+        for(int i=1;i<Width;i++){
+            gc.strokeLine(0,i*UnitSize,canvasHeight,i*UnitSize);
+        }
+    }
+
     public void showMaps(){
+
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
+                    gc.drawImage(new Image(tmp.getFilePath().toString()),i*UnitSize,j*UnitSize,UnitSize,UnitSize);
                     switch (tmp.getClass().getSimpleName()){
                         case "CalabashBoy":{
                             System.out.print("C");
