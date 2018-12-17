@@ -1,6 +1,5 @@
 package calabashBrothers.beings;
 
-import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.enums.*;
 
 /**
@@ -19,17 +18,14 @@ public class CalabashBoy extends Creature implements Fighting{
         int indexPic = rank+1;
         //System.out.println(this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg"));
         this.filePath = this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg");
+
+        setCamp(Camp.JUSTICE);  //阵营
     }
 
     @Override
     public void selfIntroduction() {
         super.selfIntroduction();
         System.out.println("我是"+this.name);
-    }
-
-    @Override
-    public void Fighting(Maps maps, int x, int y) {
-        //TODO
     }
 
     public int getRank() {

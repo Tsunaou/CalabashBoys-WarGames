@@ -150,6 +150,10 @@ public class BattleFieldController implements Config{
                 exec.execute(c);
             }
         }
+//        for(Creature c: boys){
+//            exec.execute(c);
+//        }
+
         exec.shutdown();
     }
 

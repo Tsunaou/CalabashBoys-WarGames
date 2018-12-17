@@ -1,6 +1,8 @@
 package calabashBrothers.GUI;
 
 import calabashBrothers.beings.Creature;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +16,17 @@ public class DisplayField implements Runnable{
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
     private boolean Running = true;
     private boolean firstDisplay = true;
+    private String s;
+    private Media media;
+    private MediaPlayer player;
+
+
+    public DisplayField(){
+        s = this.getClass().getClassLoader().getResource("media/Shediao.mp3").toString();
+        media = new Media(s);
+        player = new MediaPlayer(media);
+        player.play();
+    }
 
     public static Maps<Creature> getMaps() {
         return maps;
@@ -49,7 +62,14 @@ public class DisplayField implements Runnable{
                     firstDisplay = false;
                 }
             }
-            displaySleep(3000);
+//            if(maps.getCounts()<=10){
+//                player.stop();
+//                String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
+//                Media media2 = new Media(s2);
+//                player = new MediaPlayer(media2);
+//                player.play();
+//            }
+            displaySleep(1000);
         }
     }
 

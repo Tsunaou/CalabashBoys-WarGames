@@ -19,7 +19,7 @@ public class Scorpion extends Monster implements Fighting{
     }
 
     @Override
-    public void Fighting(Maps maps, int x, int y) {
+    public void Fighting(int x, int y) {
         //TODO
     }
 }

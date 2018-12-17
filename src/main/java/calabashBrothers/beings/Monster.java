@@ -1,6 +1,7 @@
 package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Maps;
+import calabashBrothers.beings.enums.Camp;
 
 /**
  * @ Author     ：Young
@@ -10,6 +11,7 @@ public class Monster extends Creature implements Fighting{
     public Monster() {
         super("小喽啰");
         this.filePath = this.getClass().getClassLoader().getResource("pic/lolo.jpg");
+        setCamp(Camp.EVIL);  //阵营
     }
 
     @Override
@@ -18,8 +20,4 @@ public class Monster extends Creature implements Fighting{
         System.out.println("我是"+this.name);
     }
 
-    @Override
-    public void Fighting(Maps maps, int x, int y) {
-        //TODO
-    }
 }

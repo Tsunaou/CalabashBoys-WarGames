@@ -7,5 +7,5 @@ import calabashBrothers.GUI.Maps;
  * @ Description：${description}
  */
 public interface Fighting {
-    void Fighting(Maps maps,int x,int y);
+    void Fighting(int x,int y);
 }

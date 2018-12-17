@@ -110,6 +110,12 @@ public class Maps<T extends Creature> implements Config{
                 T tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
                     gc.drawImage(new Image(tmp.getFilePath().toString()),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
+                    gc.setStroke(Color.RED);
+                    gc.setLineWidth(5);
+                    gc.strokeLine(j*UnitSize, i*UnitSize, (j+1)*UnitSize, i*UnitSize);
+                    gc.setStroke(Color.CHARTREUSE);
+                    gc.strokeLine(j*UnitSize, i*UnitSize, (j+tmp.getHP_Remain()/tmp.getHP_All())*UnitSize, i*UnitSize);
+
                     switch (tmp.getClass().getSimpleName()){
                         case "CalabashBoy":{
                             System.out.print("C");
@@ -161,6 +167,20 @@ public class Maps<T extends Creature> implements Config{
                     T tmp = maps.get(i).get(j).getContent();
                     if(tmp!=null){
                         res.add(tmp);
+                    }
+                }
+            }
+        }
+        return  res;
+    }
+
+    int getCounts(){
+        int res = 0;
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                synchronized (maps){
+                    if(maps.get(i).get(j).getContent()!=null){
+                        res++;
                     }
                 }
             }
