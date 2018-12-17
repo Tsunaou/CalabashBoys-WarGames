@@ -69,6 +69,7 @@ public class Maps<T extends Creature> implements Config{
 
     public  void setContent(int x,int y,T content){
         maps.get(x).get(y).setContent(content);
+        content.setLocation(new Coordinate(x,y));
     }
 
     public ArrayList<ArrayList<unit<T>>> getMaps() {
@@ -76,9 +77,7 @@ public class Maps<T extends Creature> implements Config{
     }
 
     public void drawBoradLines(){
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,canvasWidth,canvasHeight);
-        gc.setFill(Color.BLACK);
+
         gc.setLineWidth(5);
 
         //绘制N*N的边界线
@@ -94,7 +93,7 @@ public class Maps<T extends Creature> implements Config{
     public void showMaps(){
 
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
-
+        //drawBoradLines();
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();

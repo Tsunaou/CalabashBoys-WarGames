@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 
@@ -154,6 +156,18 @@ public class BattleFieldController implements Config{
     public void gameStart(ActionEvent actionEvent) {
         initCanvas();
         drawShapes(initFormation);
+
+        ExecutorService exec = Executors.newCachedThreadPool();
+
+        for(int i=0;i<7;i++){
+            exec.execute(boys.get(i));
+        }
+        exec.shutdown();
+
+//        for(int i=0;i<100;i++){
+//            maps.showMaps();
+//            displaySleep(50);
+//        }
     }
 
     public void formation1(ActionEvent actionEvent) {

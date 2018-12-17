@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.chart.*?>
@@ -58,12 +59,12 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label prefHeight="20.0" prefWidth="89.0" text="时间：">
+                  <Label id="Time" prefHeight="20.0" prefWidth="89.0" text="时间：">
                      <font>
                         <Font name="System Italic" size="20.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="20.0" prefWidth="100.0" text="Time" GridPane.columnIndex="1" />
+                  <Label id="TimeText" prefHeight="20.0" prefWidth="100.0" text="Time" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
@@ -71,22 +72,22 @@
                   <Insets bottom="10.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Label text="初始阵型选择">
+            <Label id="FormationChoice" text="初始阵型选择">
                <VBox.margin>
                   <Insets bottom="5.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="initFormationText" prefHeight="36.0" prefWidth="182.0" text="长蛇 vs 偃月">
+            <Label id="FormationChoiceText" fx:id="initFormationText" prefHeight="36.0" prefWidth="182.0" text="长蛇 vs 偃月">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Label text="速度选择">
+            <Label id="SpeedChoice" text="速度选择">
                <VBox.margin>
                   <Insets bottom="5.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <Slider showTickLabels="true" showTickMarks="true" value="50.0">
+            <Slider id="SpeedChoiceText" showTickLabels="true" showTickMarks="true" value="50.0">
                <VBox.margin>
                   <Insets bottom="10.0" top="5.0" />
                </VBox.margin>
