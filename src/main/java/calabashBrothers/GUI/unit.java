@@ -25,12 +25,8 @@ public class unit<T> {
         return content;
     }
 
-    public void setContent(T content) {
-        if(this.content==null){
-            this.content = content;
-        }else{
-            System.out.println("Collision When setting" + content.toString());
-        }
+    synchronized public void setContent(T content) {
+        this.content = content;
     }
 
     public boolean none(){

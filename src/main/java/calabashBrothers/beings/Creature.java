@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class Creature extends Beings implements Runnable, Config {
 
-    private static Maps maps;   //static变量，所有的生物共享一个maps
+    private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
 
     public Creature(String name) {
         super(name);
@@ -30,33 +30,46 @@ public class Creature extends Beings implements Runnable, Config {
         return maps;
     }
 
-    public static void setMaps(Maps maps) {
+    synchronized public static void setMaps(Maps maps) {
         Creature.maps = maps;
     }
 
-    public boolean validUnit(int x,int y){
+    public boolean insideMaps(int x,int y){
         return x>=0 && y>=0 && x<Height && y<Width;
     }
 
-    public void moveRandom(){
+    synchronized public void moveRandom(){
         Random rand = new Random();
-        int i = rand.nextInt(2);
-        int j = rand.nextInt(2);
-        while(!validUnit(-1+i,-1+j)){
-            i = rand.nextInt(2);
-            j = rand.nextInt(2);
+        int newX = 0;
+        int newY = 0;
+        try{
+            newX = location.getX() + rand.nextInt(3)-1;
+            newY = location.getY() + rand.nextInt(3)-1;
+            while (!insideMaps(newX,newY)){
+                newX = location.getX() + rand.nextInt(3)-1;
+                newY = location.getY() + rand.nextInt(3)-1;
+            }
+        }catch (NullPointerException e){
+            System.out.println(this.getClass().getSimpleName());
         }
-        if(maps.empty(i,j)){
-            maps.setContent(this.location.getX(),this.location.getY(),null);
-            this.location = new Coordinate(i,j);
-            maps.setContent(i,j,this);
+
+        synchronized (maps){
+            if(maps.empty(newX,newY)){
+                maps.setContent(location.getX(),location.getY(),null);
+                location = new Coordinate(newX,newY);
+                maps.setContent(newX,newY,this);
+            }
         }
     }
 
     //实现多线程的
     public void run(){
-        synchronized (maps){
-            moveRandom();
+        while (true){
+            synchronized (maps){
+                //System.out.println("run:"+this.toString());
+                moveRandom();
+                //maps.showMaps();
+            }
         }
     }
 }

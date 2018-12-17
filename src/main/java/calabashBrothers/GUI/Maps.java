@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ Author     ：Young
@@ -67,9 +68,11 @@ public class Maps<T extends Creature> implements Config{
         return  maps.get(x).get(y).none();
     }
 
-    public  void setContent(int x,int y,T content){
+    synchronized public  void setContent(int x,int y,T content){
         maps.get(x).get(y).setContent(content);
-        content.setLocation(new Coordinate(x,y));
+        if(content != null){
+            content.setLocation(new Coordinate(x,y));
+        }
     }
 
     public ArrayList<ArrayList<unit<T>>> getMaps() {
@@ -90,10 +93,18 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
-    public void showMaps(){
+    private void displaySleep(int ms){
+        try{
+            TimeUnit.MILLISECONDS.sleep(ms);
+        }catch (InterruptedException e){
+            System.out.println(e.toString());
+        }
+    }
+
+    public synchronized void showMaps(){
 
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
-        //drawBoradLines();
+//        drawBoradLines();
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
@@ -139,5 +150,20 @@ public class Maps<T extends Creature> implements Config{
                 maps.get(i).get(j).removeContent();
             }
         }
+    }
+
+    ArrayList<T> getLives(){
+        ArrayList<T> res = new ArrayList<>();
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                synchronized (maps){
+                    T tmp = maps.get(i).get(j).getContent();
+                    if(tmp!=null){
+                        res.add(tmp);
+                    }
+                }
+            }
+        }
+        return  res;
     }
 }

@@ -1,23 +1,15 @@
 package calabashBrothers.GUI;
 
 import calabashBrothers.beings.*;
-import calabashBrothers.beings.enums.CalabashName;
 
 import calabashBrothers.formation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.shape.ArcType;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +46,9 @@ public class BattleFieldController implements Config{
     Snake sk;                    //蛇精
     Scorpion sp;                 //蝎子精
 
+    //展示类
+    DisplayField player;
+
     @FXML
     private Canvas mainCanvas;      //主画布
     @FXML
@@ -64,16 +59,12 @@ public class BattleFieldController implements Config{
     public BattleFieldController() {
         initCreatures();
         initFormation = 1;
+        setInitFormations(initFormation);
+        player = new DisplayField();
+        player.setMaps(maps);
     }
 
-    private void displaySleep(int ms){
-        try{
-            TimeUnit.MILLISECONDS.sleep(ms);
-        }catch (InterruptedException e){
-            System.out.println(e.toString());
-        }
-    }
-
+    //初始化生物
     private void initCreatures(){
         boys = new ArrayList<Creature>();       //7个葫芦娃
         mons = new ArrayList<Creature>();       //蝎子精和小喽啰的阵营
@@ -84,19 +75,20 @@ public class BattleFieldController implements Config{
         for(int i = 0; i < 7; ++i) {
             boys.add(new CalabashBoy(i));
         }
-        mons.add(new Scorpion());
+        mons.add(sp);
         for(int i = 1; i < 19; ++i) {
-            mons.add(sp);
+            mons.add(new Monster());
         }
 
     }
-
+    //初始化画布信息
     private void initCanvas(){
         //对Creature的画布和Maps里的Canvas初始化（类的静态变量，直接设置）
         Maps.setBattleFiledCanvas(mainCanvas);
         Creature.setMaps(maps);
     }
 
+    //初始阵型
     private void Round1(){
         //Round 1： 长蛇 vs 偃月
         cs.SetFormation(maps,boys,0);
@@ -104,7 +96,6 @@ public class BattleFieldController implements Config{
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
-
     private void Round2(){
         //Round 2： 长蛇 vs 鱼鳞
         cs.SetFormation(maps,boys,0);
@@ -112,7 +103,6 @@ public class BattleFieldController implements Config{
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
-
     private void Round3(){
         //Round 3： 衝轭 vs 鱼鳞
         ce.SetFormation(maps,boys,0);
@@ -120,7 +110,6 @@ public class BattleFieldController implements Config{
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
-
     private void Round4(){
         //Round 4： 鹤翼 vs 锋矢
         hy.SetFormation(maps,boys,0);
@@ -128,7 +117,6 @@ public class BattleFieldController implements Config{
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
-
     private void Round5(){
         //Round 5： 雁行 vs 方円
         yx.SetFormation(maps,boys,0);
@@ -137,7 +125,8 @@ public class BattleFieldController implements Config{
         sk.CheeringUp(maps,7,10);
     }
 
-    private void drawShapes(int i) {
+    //第一回合，摆阵
+    private void setInitFormations(int i) {
         switch (i){
             case 0:Round1();break;
             case 1:Round2();break;
@@ -147,51 +136,56 @@ public class BattleFieldController implements Config{
             default:
                 System.out.println("执行了错误回合");
         }
-        maps.showMaps();
-//        displaySleep(1000);
-        maps.removeMaps();
     }
 
     //开始游戏
     public void gameStart(ActionEvent actionEvent) {
         initCanvas();
-        drawShapes(initFormation);
-
         ExecutorService exec = Executors.newCachedThreadPool();
+        exec.execute(player);
 
-        for(int i=0;i<7;i++){
-            exec.execute(boys.get(i));
+        ArrayList<Creature> livingList = maps.getLives();
+        for(Creature c: livingList){
+            if(c!=null){
+                exec.execute(c);
+            }
         }
-        exec.shutdown();
 
-//        for(int i=0;i<100;i++){
-//            maps.showMaps();
-//            displaySleep(50);
-//        }
+        exec.shutdown();
     }
 
     public void formation1(ActionEvent actionEvent) {
         initFormation = 0;
         initFormationText.setText("长蛇 vs 偃月");
+        maps.removeMaps();
+        setInitFormations(0);
     }
 
     public void formation2(ActionEvent actionEvent) {
         initFormation = 1;
         initFormationText.setText("长蛇 vs 鱼鳞");
+        maps.removeMaps();
+        setInitFormations(1);
     }
 
     public void formation3(ActionEvent actionEvent) {
         initFormation = 2;
         initFormationText.setText("衝轭 vs 鱼鳞");
+        maps.removeMaps();
+        setInitFormations(2);
     }
 
     public void formation4(ActionEvent actionEvent) {
         initFormation = 3;
         initFormationText.setText("鹤翼 vs 锋矢");
+        maps.removeMaps();
+        setInitFormations(3);
     }
 
     public void formation5(ActionEvent actionEvent) {
         initFormation = 4;
         initFormationText.setText("雁行 vs 方円");
+        maps.removeMaps();
+        setInitFormations(4);
     }
 }

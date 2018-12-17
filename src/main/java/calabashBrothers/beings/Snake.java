@@ -21,7 +21,7 @@ public class Snake extends Monster implements CheeringUp{
     @Override
     public void CheeringUp(Maps<Creature> maps, int x, int y) {
         if(maps.empty(x,y)){
-            maps.getMaps().get(x).get(y).setContent(this);
+            maps.setContent(x,y,this);
         }
     }
 }
