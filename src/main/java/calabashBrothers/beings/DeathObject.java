@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 public class DeathObject extends Creature{
     public DeathObject() {
         super("死亡物体");
-        this.filePath = this.getClass().getClassLoader().getResource("pic/death.png");
+        this.filePath = this.getClass().getClassLoader().getResource("pic/ghost.png");
         image = new Image(filePath.toString());
 
         System.out.println(filePath);

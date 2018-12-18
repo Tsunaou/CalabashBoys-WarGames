@@ -116,20 +116,24 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
     @Override
     public void Fighting(int x, int y) {
         //TODO
+        if(this.toString()=="Scorpion"){
+            System.out.println("蝎子精也能攻击？");
+        }
         synchronized (maps){
-//            String musicfile = "";
-//            switch (maps.getContent(x,y).getCamp()){
-//                case JUSTICE: musicfile = this.getClass().getClassLoader().getResource("media/weapons.mp3").toString();break;
-//                case EVIL:musicfile = this.getClass().getClassLoader().getResource("media/damage1.mp3").toString();break;
-//                case DEAD:return;
-//            }
-//
-//            Media media2 = new Media(musicfile);
-//            MediaPlayer mp2 = new MediaPlayer(media2);
-//            mp2.play();
+            String musicfile = "";
+            switch (maps.getContent(x,y).getCamp()){
+                case JUSTICE: musicfile = this.getClass().getClassLoader().getResource("media/weapons.mp3").toString();break;
+                case EVIL:musicfile = this.getClass().getClassLoader().getResource("media/damage1.mp3").toString();break;
+                case DEAD:return;
+            }
+
+            Media media2 = new Media(musicfile);
+            MediaPlayer mp2 = new MediaPlayer(media2);
+            mp2.play();
             double hp = maps.getContent(x,y).getHP_Remain();
-            maps.drawAtk(this,location.getX(),location.getY(),x,y);
-            hp -= 30*this.getATK()/maps.getContent(x,y).getDEF();
+            double dagamePoints = DAMAGE_PER*this.getATK()/maps.getContent(x,y).getDEF();
+            maps.drawAtk(this,location.getX(),location.getY(),x,y,(int)dagamePoints);
+            hp -= dagamePoints;
             if(hp<=0){
                 maps.getContent(x,y).setHP_Remain(0.1);
                 maps.getContent(x,y).setLiving(false);
@@ -189,6 +193,14 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
     public void setHP_Remain(double HP_Remain) {
         this.HP_Remain = HP_Remain;
     }
+
+    public void addHP_Remain(double addition){
+        HP_Remain += addition;
+        if(HP_Remain>HP_All){
+            HP_Remain = HP_All;
+        }
+    }
+
 
     public void setLiving(boolean living) {
         Living = living;

@@ -9,12 +9,15 @@ public interface Config {
     final int Height = 15;  //棋盘布局的高度
     final int Width = 15;   //棋盘布局的宽度
 
+    //基准伤害
+    final int DAMAGE_PER = 15;
+
     //攻击力
     final int ATK_Creature = 5;
     final int ATK_Calabash = 8;
     final int ATK_Grandpa = 2;
     final int ATK_Monster = 6;
-    final int ATK_Scorpion = 15;
+    final int ATK_Scorpion = 8;
     final int ATK_Snake = 10;
 
     //防御力
@@ -22,7 +25,7 @@ public interface Config {
     final int DEF_Calabash = 10;
     final int DEF_Grandpa = 20;
     final int DEF_Monster = 8;
-    final int DEF_Scorpion = 15;
+    final int DEF_Scorpion = 12;
     final int DEF_Snake = 10;
 
     //生命值
@@ -36,7 +39,7 @@ public interface Config {
     //攻击范围
     final int Scale_Creature = 1;
     final int Scale_Calabash = 1;
-    final int Scale_Grandpa = 2;
+    final int Scale_Grandpa = 1;
     final int Scale_Monster = 1;
     final int Scale_Scorpion = 1;
     final int Scale_Snake = 1;

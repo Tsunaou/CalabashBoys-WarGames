@@ -1,9 +1,11 @@
 package calabashBrothers.GUI;
 
 import calabashBrothers.beings.Creature;
+import calabashBrothers.beings.enums.Camp;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,11 +25,11 @@ public class DisplayField implements Runnable{
 
     public DisplayField(){
         s = this.getClass().getClassLoader().getResource("media/Shediao.mp3").toString();
-//        media = new Media(s);
-//        player = new MediaPlayer(media);
-//        player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
-//        player.setVolume(0.5);
-//        player.play();
+        media = new Media(s);
+        player = new MediaPlayer(media);
+        player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
+        player.setVolume(0.5);
+        player.play();
     }
 
     public static Maps<Creature> getMaps() {
@@ -55,6 +57,18 @@ public class DisplayField implements Runnable{
         }
     }
 
+    void changeMusic(String url,boolean replay){
+        player.stop();
+        String s2 = this.getClass().getClassLoader().getResource(url).toString();
+        Media media2 = new Media(s2);
+        player = new MediaPlayer(media2);
+        if(replay){
+            player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
+        }
+        player.setVolume(0.5);
+        player.play();
+    }
+
     void display(){
         boolean dangerFlag = false;
         while (Running){
@@ -66,26 +80,33 @@ public class DisplayField implements Runnable{
                     firstDisplay = false;
                 }
             }
-//            synchronized (maps){
-//                if(maps.getCounts()<=15 && !dangerFlag){
-//                    player.stop();
-//                    String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
-//                    Media media2 = new Media(s2);
-//                    player = new MediaPlayer(media2);
-//                    player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
-//                    player.setVolume(0.5);
-//                    player.play();
-//                    System.err.println("人数小于10人");
-//                    dangerFlag = true;
-//                }
-//            }
+            synchronized (maps){
+                int justiceCnts = maps.getJusticeCounts();
+                int evilCnts = maps.getEvilCounts();
+                if((justiceCnts+evilCnts)<=10 && !dangerFlag){
+                    changeMusic("media/luffy.mp3",true);
+                    System.err.println("人数小于10人");
+                    dangerFlag = true;
+                }
+                if(justiceCnts==0 && evilCnts!=0){
+                    maps.gameOver(Camp.EVIL);
+                    changeMusic("media/lose.mp3",false);
+                    this.Running = false;
+                }
+                if(evilCnts==0 && justiceCnts!=0){
+                    maps.gameOver(Camp.JUSTICE);
+                    changeMusic("media/win.mp3",false);
+                    this.Running = false;
+                }
+
+            }
             displaySleep(1000);
         }
     }
 
     public void run(){
         display();
-        player.stop();
+//        player.stop();
     }
 
 }

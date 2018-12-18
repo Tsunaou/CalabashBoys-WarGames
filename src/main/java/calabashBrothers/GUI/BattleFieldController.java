@@ -165,6 +165,8 @@ public class BattleFieldController implements Config{
         initFormationText.setText("长蛇 vs 偃月");
         maps.removeMaps();
         setInitFormations(0);
+        initCanvas();
+        maps.showMaps();
     }
 
     public void formation2(ActionEvent actionEvent) {
@@ -172,6 +174,8 @@ public class BattleFieldController implements Config{
         initFormationText.setText("长蛇 vs 鱼鳞");
         maps.removeMaps();
         setInitFormations(1);
+        initCanvas();
+        maps.showMaps();
     }
 
     public void formation3(ActionEvent actionEvent) {
@@ -179,6 +183,8 @@ public class BattleFieldController implements Config{
         initFormationText.setText("衝轭 vs 鱼鳞");
         maps.removeMaps();
         setInitFormations(2);
+        initCanvas();
+        maps.showMaps();
     }
 
     public void formation4(ActionEvent actionEvent) {
@@ -186,6 +192,8 @@ public class BattleFieldController implements Config{
         initFormationText.setText("鹤翼 vs 锋矢");
         maps.removeMaps();
         setInitFormations(3);
+        initCanvas();
+        maps.showMaps();
     }
 
     public void formation5(ActionEvent actionEvent) {
@@ -193,5 +201,7 @@ public class BattleFieldController implements Config{
         initFormationText.setText("雁行 vs 方円");
         maps.removeMaps();
         setInitFormations(4);
+        initCanvas();
+        maps.showMaps();
     }
 }

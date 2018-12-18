@@ -30,6 +30,7 @@ public class Scorpion extends Monster implements Fighting{
 
     @Override
     public void Fighting(int x, int y) {
-        //TODO
+        super.Fighting(x, y);
+        this.addHP_Remain(2);
     }
 }

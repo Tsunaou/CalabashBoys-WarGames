@@ -27,6 +27,9 @@ public class Maps<T extends Creature> implements Config{
     private static double canvasWidth;    //画布的宽度
     private static double UnitSize;       //单位宽度
 
+    private int justiceCounts;
+    private int evilCounts;
+    private boolean startFlag;
 
     public static Canvas getBattleFiledCanvas() {
         return battleFiledCanvas;
@@ -53,6 +56,9 @@ public class Maps<T extends Creature> implements Config{
                 maps.get(i).add(new unit<T>(i,j));
             }
         }
+        this.justiceCounts = 100;
+        this.evilCounts = 100;
+        this.startFlag  = false;
     }
 
     public int getRows() {
@@ -82,7 +88,7 @@ public class Maps<T extends Creature> implements Config{
         return maps;
     }
 
-    public void drawBoradLines(){
+    private void drawBoradLines(){
 
         gc.setFill(Color.rgb(255,255,255,0.4));
         gc.fillRect(0,0,canvasWidth,canvasWidth);
@@ -110,6 +116,11 @@ public class Maps<T extends Creature> implements Config{
     public synchronized void showMaps(){
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
         drawBoradLines();
+        if(startFlag){
+            this.justiceCounts = 0;
+            this.evilCounts = 0;
+        }
+        int notNullCnts=0;
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
@@ -121,6 +132,16 @@ public class Maps<T extends Creature> implements Config{
                         gc.strokeLine(j*UnitSize, i*UnitSize, (j+1)*UnitSize, i*UnitSize);
                         gc.setStroke(Color.CHARTREUSE);
                         gc.strokeLine(j*UnitSize, i*UnitSize, (j+tmp.getHP_Remain()/tmp.getHP_All())*UnitSize, i*UnitSize);
+                    }
+
+                    if(!startFlag){
+                        notNullCnts++;
+                    }
+
+                    if(tmp.getCamp() == Camp.JUSTICE){
+                        justiceCounts++;
+                    }else if(tmp.getCamp() == Camp.EVIL){
+                        evilCounts++;
                     }
 
 
@@ -160,6 +181,12 @@ public class Maps<T extends Creature> implements Config{
         }
         System.out.println(" ");
         System.out.println(" ");
+        if(notNullCnts > 14){
+            startFlag = true;
+        }
+        System.out.println("刷新：justiceCounts:"+justiceCounts);
+        System.out.println("刷新：evilCounts:"+evilCounts);
+
     }
 
     public synchronized void refreshMaps(){
@@ -189,21 +216,35 @@ public class Maps<T extends Creature> implements Config{
         return  res;
     }
 
-    //得到maps中的存活的总数 TODO:可优化，给maps一个计数变量
-    int getCounts(){
-        int res = 0;
+    //得到maps中的存活的两方数量， TODO:可优化，给maps一个计数变量
+    ArrayList<Integer> getCounts(){
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        int justiceCnts = 0;
+        int evilCnts = 0;
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
                 synchronized (maps){
                     if(maps.get(i).get(j).getContent()!=null){
-                        if(maps.get(i).get(j).getContent().getCamp()!=Camp.DEAD){
-                            res++;
+                        if(maps.get(i).get(j).getContent().getCamp()==Camp.JUSTICE){
+                            justiceCnts++;
+                        }else if(maps.get(i).get(j).getContent().getCamp()==Camp.EVIL){
+                            evilCnts++;
                         }
                     }
                 }
             }
         }
+        res.add(justiceCnts);
+        res.add(evilCnts);
         return  res;
+    }
+
+    public int getJusticeCounts() {
+        return justiceCounts;
+    }
+
+    public int getEvilCounts() {
+        return evilCounts;
     }
 
     //寻找敌人的函数
@@ -256,7 +297,7 @@ public class Maps<T extends Creature> implements Config{
     }
 
     //从(fromX,Y) to (x,y)的攻击波，左上角的坐标
-    public void drawAtk(T t,int fromX,int fromY,int x,int y){
+    public void drawAtk(T t,int fromX,int fromY,int x,int y,int damagePoints){
         System.out.println("Atk:from"+"("+fromX+","+fromY+") to ("+x+","+y+")");
         double centerFromX = (double) fromX*UnitSize+UnitSize/4; //起始方格中央
         double centerFromY = (double) fromY*UnitSize+UnitSize/4; //起始方格中央
@@ -273,10 +314,30 @@ public class Maps<T extends Creature> implements Config{
         //攻击动画
         double picSize = UnitSize/2;
 //        gc.drawImage(t.getImageAtk(),centerFromY,centerFromX,UnitSize/2,UnitSize/2);
+        gc.setFill(Color.RED);
+//        gc.fillText("HP-"+damagePoints,centerTargetY,centerTargetX,UnitSize*0.75);
         gc.drawImage(t.getImageAtk(),centerTargetY,centerTargetX,picSize,picSize);
         gc.drawImage(t.getImageAtk(),centerY,centerX,picSize,picSize);
 //        gc.drawImage(t.getImageAtk(),(centerY+centerFromY)/2,(centerX+centerFromX)/2,picSize,picSize);
         gc.drawImage(t.getImageAtk(),(centerY+centerTargetY)/2,(centerX+centerTargetX)/2,picSize,picSize);
 
+    }
+
+    public void gameOver(Camp winner){
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                synchronized (maps){
+                    if(maps.get(i).get(j).getContent()!=null){
+                        if(maps.get(i).get(j).getContent().getCamp()!=Camp.DEAD){
+                            maps.get(i).get(j).getContent().setLiving(false);
+                        }
+                    }
+                }
+            }
+        }
+        String winPath =this.getClass().getClassLoader().getResource("pic/JustiveWinner.jpg").toString();
+        if(winner == Camp.EVIL)
+            winPath=this.getClass().getClassLoader().getResource("pic/EvilWinner.jpg").toString();
+        gc.drawImage(new Image(winPath),0,0,canvasWidth,canvasHeight);
     }
 }
