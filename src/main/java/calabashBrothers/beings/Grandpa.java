@@ -2,6 +2,7 @@ package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.enums.Camp;
+import javafx.scene.image.Image;
 
 /**
  * @ Author     ：Young
@@ -12,6 +13,7 @@ public class Grandpa extends Creature implements CheeringUp{
     public Grandpa() {
         super("葫芦娃爷爷");
         this.filePath = this.getClass().getClassLoader().getResource("pic/grandpa.jpg");
+        image = new Image(filePath.toString());
         setCamp(Camp.JUSTICE);  //阵营
     }
 

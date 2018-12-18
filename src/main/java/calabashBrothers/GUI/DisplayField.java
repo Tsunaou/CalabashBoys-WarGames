@@ -54,9 +54,10 @@ public class DisplayField implements Runnable{
     }
 
     void display(){
+        boolean dangerFlag = false;
         while (Running){
             synchronized (maps){
-                maps.refreshMaps();
+//                maps.refreshMaps();
                 maps.showMaps();
                 if(firstDisplay){
                     displaySleep(3);
@@ -64,17 +65,17 @@ public class DisplayField implements Runnable{
                 }
             }
             synchronized (maps){
-                if(maps.getCounts()<=10){
-//                    player.stop();
-//                    String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
-//                    Media media2 = new Media(s2);
-//                    player = new MediaPlayer(media2);
-//                    player.play();
+                if(maps.getCounts()<=15 && !dangerFlag){
+                    player.stop();
+                    String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
+                    Media media2 = new Media(s2);
+                    player = new MediaPlayer(media2);
+                    player.play();
                     System.err.println("人数小于10人");
+                    dangerFlag = true;
                 }
             }
-
-            displaySleep(1500);
+            displaySleep(1000);
         }
     }
 

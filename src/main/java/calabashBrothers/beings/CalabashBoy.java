@@ -1,6 +1,7 @@
 package calabashBrothers.beings;
 
 import calabashBrothers.beings.enums.*;
+import javafx.scene.image.Image;
 
 /**
  * @ Author     ：Young
@@ -18,7 +19,7 @@ public class CalabashBoy extends Creature implements Fighting{
         int indexPic = rank+1;
         //System.out.println(this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg"));
         this.filePath = this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg");
-
+        image = new Image(filePath.toString());
         setCamp(Camp.JUSTICE);  //阵营
     }
 

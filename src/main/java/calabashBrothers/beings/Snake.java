@@ -1,6 +1,7 @@
 package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Maps;
+import javafx.scene.image.Image;
 
 /**
  * @ Author     ：Young
@@ -10,6 +11,7 @@ public class Snake extends Monster implements CheeringUp{
     public Snake() {
         this.name="蛇精";
         this.filePath = this.getClass().getClassLoader().getResource("pic/snake.jpg");
+        image = new Image(filePath.toString());
     }
 
     @Override

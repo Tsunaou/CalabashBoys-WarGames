@@ -2,6 +2,7 @@ package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.enums.Camp;
+import javafx.scene.image.Image;
 
 /**
  * @ Author     ：Young
@@ -11,6 +12,7 @@ public class Monster extends Creature implements Fighting{
     public Monster() {
         super("小喽啰");
         this.filePath = this.getClass().getClassLoader().getResource("pic/lolo.jpg");
+        image = new Image(filePath.toString());
         setCamp(Camp.EVIL);  //阵营
     }
 

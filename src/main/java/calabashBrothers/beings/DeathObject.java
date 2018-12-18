@@ -1,6 +1,7 @@
 package calabashBrothers.beings;
 
 import calabashBrothers.beings.enums.Camp;
+import javafx.scene.image.Image;
 
 /**
  * @ Author     ：Young
@@ -11,6 +12,8 @@ public class DeathObject extends Creature{
     public DeathObject() {
         super("死亡物体");
         this.filePath = this.getClass().getClassLoader().getResource("pic/death.png");
+        image = new Image(filePath.toString());
+
         System.out.println(filePath);
         setCamp(Camp.DEAD);  //阵营
     }

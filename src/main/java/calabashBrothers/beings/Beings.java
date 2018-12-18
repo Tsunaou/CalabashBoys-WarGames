@@ -2,6 +2,7 @@ package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Coordinate;
 import calabashBrothers.GUI.unit;
+import javafx.scene.image.Image;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +16,12 @@ public class Beings {
 
     protected String name;
     protected URL filePath;  //新增，GUI使用直接寻址到resource的路径
+
+    public Image getImage() {
+        return image;
+    }
+
+    protected Image image;
 
     Coordinate location;
 

@@ -2,6 +2,7 @@ package calabashBrothers.GUI;
 
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
+import calabashBrothers.beings.enums.Direction;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -103,13 +104,13 @@ public class Maps<T extends Creature> implements Config{
     }
 
     public synchronized void showMaps(){
-
+        gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
 //        drawBoradLines();
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
-                    gc.drawImage(new Image(tmp.getFilePath().toString()),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
+                    gc.drawImage(tmp.getImage(),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
                     if(tmp.getCamp()!= Camp.DEAD){
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
@@ -181,6 +182,7 @@ public class Maps<T extends Creature> implements Config{
         return  res;
     }
 
+    //得到maps中的存活的总数 TODO:可优化，给maps一个计数变量
     int getCounts(){
         int res = 0;
         for(int i=0;i<rows;i++){
@@ -196,4 +198,53 @@ public class Maps<T extends Creature> implements Config{
         }
         return  res;
     }
+
+    //寻找敌人的函数
+    Direction getEnemyDirection(int centerX, int centerY){
+        Camp myCemp = maps.get(centerX).get(centerY).getContent().getCamp();
+        //上下左右扫描
+        int upCnts = 0;
+        int downCnts = 0;
+        int leftCnts = 0;
+        int rightCnts = 0;
+        synchronized (maps){
+            for(int i=0;i<rows;i++){
+                for(int j=0;j<cols;j++){
+                    if(maps.get(i).get(j).getContent()!=null){
+                        if(maps.get(i).get(j).getContent().getCamp()!=Camp.DEAD){
+                            //此时只能是JUSTICE OR EVIL
+                            if(myCemp!=maps.get(i).get(j).getContent().getCamp()){
+                                if(centerX<i){
+                                    leftCnts++;
+                                }else if(centerX>i){
+                                    rightCnts++;
+                                }else if(centerY<j){
+                                    upCnts++;
+                                }else if(centerY>j){
+                                    downCnts++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Direction res = Direction.UP;
+        int maxCnts = upCnts;
+        if(downCnts>maxCnts){
+            res = Direction.DOWN;
+            maxCnts = downCnts;
+        }
+        if(leftCnts>maxCnts){
+            res = Direction.LEFT;
+            maxCnts = leftCnts;
+        }
+        if(rightCnts>maxCnts){
+            res = Direction.RIGHT;
+            maxCnts = rightCnts;
+        }
+        return  res;
+    }
+
+
 }

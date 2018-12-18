@@ -1,6 +1,7 @@
 package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Maps;
+import javafx.scene.image.Image;
 
 /**
  * @ Author     ：Young
@@ -10,6 +11,7 @@ public class Scorpion extends Monster implements Fighting{
     public Scorpion() {
         this.name="蝎子精";
         this.filePath = this.getClass().getClassLoader().getResource("pic/scorpion.jpg");
+        image = new Image(filePath.toString());
     }
 
     @Override
