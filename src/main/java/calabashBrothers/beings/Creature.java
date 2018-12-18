@@ -84,6 +84,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
             switch (maps.getContent(x,y).getCamp()){
                 case JUSTICE: musicfile = this.getClass().getClassLoader().getResource("media/weapons.mp3").toString();break;
                 case EVIL:musicfile = this.getClass().getClassLoader().getResource("media/damage1.mp3").toString();break;
+                case DEAD:return;
             }
             Media media2 = new Media(musicfile);
             MediaPlayer mp2 = new MediaPlayer(media2);
@@ -94,6 +95,8 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
                 maps.getContent(x,y).setHP_Remain(0.1);
                 maps.getContent(x,y).setLiving(false);
                 maps.setContent(x,y,null);
+                System.err.println("setDeath");
+                maps.setContent(x,y,new DeathObject());
             }else{
                 maps.getContent(x,y).setHP_Remain(hp);
             }

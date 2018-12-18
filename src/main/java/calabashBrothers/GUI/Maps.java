@@ -1,6 +1,7 @@
 package calabashBrothers.GUI;
 
 import calabashBrothers.beings.Creature;
+import calabashBrothers.beings.enums.Camp;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -103,18 +104,20 @@ public class Maps<T extends Creature> implements Config{
 
     public synchronized void showMaps(){
 
-        gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
 //        drawBoradLines();
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
                     gc.drawImage(new Image(tmp.getFilePath().toString()),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
-                    gc.setStroke(Color.RED);
-                    gc.setLineWidth(5);
-                    gc.strokeLine(j*UnitSize, i*UnitSize, (j+1)*UnitSize, i*UnitSize);
-                    gc.setStroke(Color.CHARTREUSE);
-                    gc.strokeLine(j*UnitSize, i*UnitSize, (j+tmp.getHP_Remain()/tmp.getHP_All())*UnitSize, i*UnitSize);
+                    if(tmp.getCamp()!= Camp.DEAD){
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(5);
+                        gc.strokeLine(j*UnitSize, i*UnitSize, (j+1)*UnitSize, i*UnitSize);
+                        gc.setStroke(Color.CHARTREUSE);
+                        gc.strokeLine(j*UnitSize, i*UnitSize, (j+tmp.getHP_Remain()/tmp.getHP_All())*UnitSize, i*UnitSize);
+                    }
+
 
                     switch (tmp.getClass().getSimpleName()){
                         case "CalabashBoy":{
@@ -151,6 +154,10 @@ public class Maps<T extends Creature> implements Config{
         System.out.println(" ");
     }
 
+    public synchronized void refreshMaps(){
+        gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
+    }
+
     public void removeMaps(){
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
@@ -180,7 +187,9 @@ public class Maps<T extends Creature> implements Config{
             for(int j=0;j<cols;j++){
                 synchronized (maps){
                     if(maps.get(i).get(j).getContent()!=null){
-                        res++;
+                        if(maps.get(i).get(j).getContent().getCamp()!=Camp.DEAD){
+                            res++;
+                        }
                     }
                 }
             }

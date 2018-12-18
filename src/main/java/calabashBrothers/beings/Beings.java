@@ -30,6 +30,10 @@ public class Beings {
         return filePath;
     }
 
+    public void setFilePath(URL filePath) {
+        this.filePath = filePath;
+    }
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName();

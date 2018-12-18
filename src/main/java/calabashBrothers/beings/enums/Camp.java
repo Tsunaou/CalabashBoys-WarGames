@@ -6,5 +6,5 @@ package calabashBrothers.beings.enums;
  * @ Description：立场（葫芦娃的不同阵营）
  */
 public enum  Camp {
-    JUSTICE,EVIL
+    JUSTICE,EVIL,DEAD
 }
