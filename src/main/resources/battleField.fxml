@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.canvas.*?>
@@ -16,89 +17,89 @@
 <?import javafx.scene.control.Label?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="/battleField.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calabashBrothers.GUI.BattleFieldController">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="文件">
-            <items>
-              <MenuItem mnemonicParsing="false" text="打开" />
-                  <MenuItem mnemonicParsing="false" text="保存" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="阵型选择">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#formation1" text="长蛇 vs 偃月" />
-                  <MenuItem mnemonicParsing="false" onAction="#formation2" text="长蛇 vs 鱼鳞" />
-                  <MenuItem mnemonicParsing="false" onAction="#formation3" text="衝轭 vs 鱼鳞" />
-                  <MenuItem mnemonicParsing="false" onAction="#formation4" text="鹤翼 vs 锋矢" />
-                  <MenuItem mnemonicParsing="false" onAction="#formation5" text="雁行 vs 方円" />
-              </items>
-            </Menu>
-          <Menu mnemonicParsing="false" text="帮助">
-            <items>
-              <MenuItem mnemonicParsing="false" text="使用说明" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="关于">
-            <items>
-              <MenuItem mnemonicParsing="false" text="关于本程序" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-   <left>
-      <VBox prefHeight="722.0" prefWidth="194.0" BorderPane.alignment="CENTER">
-         <children>
-            <GridPane prefHeight="49.0" prefWidth="194.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label id="Time" prefHeight="20.0" prefWidth="89.0" text="时间：">
-                     <font>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="文件">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="打开" />
+                        <MenuItem mnemonicParsing="false" text="保存" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="阵型选择">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#formation1" text="长蛇 vs 偃月" />
+                        <MenuItem mnemonicParsing="false" onAction="#formation2" text="长蛇 vs 鱼鳞" />
+                        <MenuItem mnemonicParsing="false" onAction="#formation3" text="衝轭 vs 鱼鳞" />
+                        <MenuItem mnemonicParsing="false" onAction="#formation4" text="鹤翼 vs 锋矢" />
+                        <MenuItem mnemonicParsing="false" onAction="#formation5" text="雁行 vs 方円" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="帮助">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="使用说明" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="关于">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="关于本程序" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <left>
+        <VBox prefHeight="722.0" prefWidth="194.0" BorderPane.alignment="CENTER">
+            <children>
+                <GridPane prefHeight="49.0" prefWidth="194.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label id="Time" prefHeight="20.0" prefWidth="89.0" text="时间：">
+                            <font>
+                                <Font name="System Italic" size="20.0" />
+                            </font>
+                        </Label>
+                        <Label id="TimeText" prefHeight="20.0" prefWidth="100.0" text="Time" GridPane.columnIndex="1" />
+                    </children>
+                </GridPane>
+                <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Label id="FormationChoice" text="初始阵型选择">
+                    <VBox.margin>
+                        <Insets bottom="5.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+                <Label id="FormationChoiceText" fx:id="initFormationText" prefHeight="36.0" prefWidth="182.0" text="长蛇 vs 偃月">
+                    <font>
                         <Font name="System Italic" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label id="TimeText" prefHeight="20.0" prefWidth="100.0" text="Time" GridPane.columnIndex="1" />
-               </children>
-            </GridPane>
-            <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="5.0" />
-               </VBox.margin>
-            </Button>
-            <Label id="FormationChoice" text="初始阵型选择">
-               <VBox.margin>
-                  <Insets bottom="5.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <Label id="FormationChoiceText" fx:id="initFormationText" prefHeight="36.0" prefWidth="182.0" text="长蛇 vs 偃月">
-               <font>
-                  <Font name="System Italic" size="20.0" />
-               </font>
-            </Label>
-            <Label id="SpeedChoice" text="速度选择">
-               <VBox.margin>
-                  <Insets bottom="5.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <Slider id="SpeedChoiceText" showTickLabels="true" showTickMarks="true" value="50.0">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="5.0" />
-               </VBox.margin>
-            </Slider>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="30.0" left="10.0" top="15.0" />
-         </BorderPane.margin>
-      </VBox>
-   </left>
-   <center>
-      <Canvas id="mainCanvas" fx:id="mainCanvas" height="720.0" width="720.0" BorderPane.alignment="CENTER" />
-   </center>
+                    </font>
+                </Label>
+                <Label id="SpeedChoice" text="速度选择">
+                    <VBox.margin>
+                        <Insets bottom="5.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+                <Slider id="SpeedChoiceText" showTickLabels="true" showTickMarks="true" value="50.0">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="5.0" />
+                    </VBox.margin>
+                </Slider>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="30.0" left="10.0" top="15.0" />
+            </BorderPane.margin>
+        </VBox>
+    </left>
+    <center>
+        <Canvas id="mainCanvas" fx:id="mainCanvas" height="720.0" width="720.0" BorderPane.alignment="CENTER" />
+    </center>
 </BorderPane>
