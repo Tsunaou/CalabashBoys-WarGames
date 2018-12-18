@@ -28,6 +28,7 @@ public class BattleFieldController implements Config{
     private double UnitSize;       //单位宽度
 
     private int initFormation;     //初始对阵
+    private boolean fighting;
 
     //可以写一个阵型工厂类
     ChangShe cs = new ChangShe(4,3);//长蛇阵 葫芦娃阵法
@@ -59,6 +60,7 @@ public class BattleFieldController implements Config{
     public BattleFieldController() {
         initCreatures();
         initFormation = 1;
+        fighting = false;
         setInitFormations(initFormation);
         player = new DisplayField();
         player.setMaps(maps);
@@ -140,21 +142,22 @@ public class BattleFieldController implements Config{
 
     //开始游戏
     public void gameStart(ActionEvent actionEvent) {
-        initCanvas();
-        ExecutorService exec = Executors.newCachedThreadPool();
-        exec.execute(player);
 
-        ArrayList<Creature> livingList = maps.getLives();
-        for(Creature c: livingList){
-            if(c!=null){
-                exec.execute(c);
+        if(!fighting){
+            fighting = true;
+            initCanvas();
+            ExecutorService exec = Executors.newCachedThreadPool();
+            exec.execute(player);
+
+            ArrayList<Creature> livingList = maps.getLives();
+            for(Creature c: livingList){
+                if(c!=null){
+                    exec.execute(c);
+                }
             }
+            exec.shutdown();
         }
-//        for(Creature c: boys){
-//            exec.execute(c);
-//        }
 
-        exec.shutdown();
     }
 
     public void formation1(ActionEvent actionEvent) {

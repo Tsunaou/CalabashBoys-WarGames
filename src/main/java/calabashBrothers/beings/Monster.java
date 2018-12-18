@@ -13,6 +13,7 @@ public class Monster extends Creature implements Fighting{
         super("小喽啰");
         this.filePath = this.getClass().getClassLoader().getResource("pic/lolo.jpg");
         image = new Image(filePath.toString());
+        imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/storm.png").toString());
         setCamp(Camp.EVIL);  //阵营
     }
 

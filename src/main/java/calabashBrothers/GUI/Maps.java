@@ -138,8 +138,11 @@ public class Maps<T extends Creature> implements Config{
                         }break;
 
                         case"Snake":{
-                                System.out.print("S");
+                            System.out.print("S");
                         }break;
+                        case "DeathObject":{
+                            System.out.print("D");
+                        }
                         default:{
                             System.out.println("Error when showMaps");
                         }
@@ -200,7 +203,7 @@ public class Maps<T extends Creature> implements Config{
     }
 
     //寻找敌人的函数
-    Direction getEnemyDirection(int centerX, int centerY){
+    public Direction getEnemyDirection(int centerX, int centerY){
         Camp myCemp = maps.get(centerX).get(centerY).getContent().getCamp();
         //上下左右扫描
         int upCnts = 0;
@@ -208,6 +211,7 @@ public class Maps<T extends Creature> implements Config{
         int leftCnts = 0;
         int rightCnts = 0;
         synchronized (maps){
+            //i在画布上代表横坐标，j代表纵坐标
             for(int i=0;i<rows;i++){
                 for(int j=0;j<cols;j++){
                     if(maps.get(i).get(j).getContent()!=null){
@@ -215,13 +219,14 @@ public class Maps<T extends Creature> implements Config{
                             //此时只能是JUSTICE OR EVIL
                             if(myCemp!=maps.get(i).get(j).getContent().getCamp()){
                                 if(centerX<i){
-                                    leftCnts++;
-                                }else if(centerX>i){
                                     rightCnts++;
-                                }else if(centerY<j){
-                                    upCnts++;
-                                }else if(centerY>j){
+                                }else if(centerX>i){
+                                    leftCnts++;
+                                }
+                                if(centerY<j){
                                     downCnts++;
+                                }else if(centerY>j){
+                                    upCnts++;
                                 }
                             }
                         }
@@ -246,5 +251,9 @@ public class Maps<T extends Creature> implements Config{
         return  res;
     }
 
-
+    public void drawAtk(T t,int fromX,int fromY,int x,int y){
+        //从(fromX,Y) to (x,y)的攻击波
+        gc.drawImage(t.getImageAtk(),(fromY+y)/2*UnitSize,(fromX+x)/2*UnitSize,UnitSize/2,UnitSize/2);
+        gc.drawImage(t.getImageAtk(),y*UnitSize,x*UnitSize,UnitSize/2,UnitSize/2);
+    }
 }

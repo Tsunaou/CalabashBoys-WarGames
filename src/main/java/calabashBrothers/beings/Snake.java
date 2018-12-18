@@ -12,6 +12,7 @@ public class Snake extends Monster implements CheeringUp{
         this.name="蛇精";
         this.filePath = this.getClass().getClassLoader().getResource("pic/snake.jpg");
         image = new Image(filePath.toString());
+        imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/poison.png").toString());
     }
 
     @Override

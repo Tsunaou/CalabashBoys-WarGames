@@ -5,8 +5,11 @@ import calabashBrothers.GUI.Config;
 import calabashBrothers.GUI.Coordinate;
 import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.enums.Camp;
+import calabashBrothers.beings.enums.Direction;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
 
 import java.util.Random;
 
@@ -23,6 +26,11 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
     private double Attack;
     private double Defence;
 
+
+
+    Image imageAtk;
+
+
     public boolean Living;    //是否存活
     public Camp camp;          //阵营，防止自相残杀
 
@@ -32,8 +40,8 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
     public Creature(String name) {
         super(name);
         this.Living = true;
-        this.HP_All = 100;
-        this.HP_Remain = 70;
+        this.HP_All = 150;
+        this.HP_Remain = 150;
     }
 
     public void selfIntroduction() {
@@ -57,8 +65,29 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
         int newX = 0;
         int newY = 0;
         try{
-            newX = location.getX() + rand.nextInt(3)-1;
-            newY = location.getY() + rand.nextInt(3)-1;
+            int p = rand.nextInt(5);
+            if(p<2) //不一定严格寻找
+            {
+                Direction direct = Direction.UP;
+                int offX = 0;
+                int offY = 0;
+                synchronized (maps){
+                    direct = maps.getEnemyDirection(location.getX(),location.getY());
+                    System.out.println(this.toString()+" "+direct);
+                    switch (direct){
+                        case UP:    offY=-1;break;
+                        case DOWN:  offY=1;break;
+                        case LEFT:  offX=-1;break;
+                        case RIGHT: offX=1; break;
+                    }
+                }
+                newX = location.getX() + offX;
+                newY = location.getY() + offY;
+            }else {
+                newX = location.getX() + rand.nextInt(3)-1;
+                newY = location.getY() + rand.nextInt(3)-1;
+            }
+
             while (!insideMaps(newX,newY)){
                 newX = location.getX() + rand.nextInt(3)-1;
                 newY = location.getY() + rand.nextInt(3)-1;
@@ -68,6 +97,12 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
         }
 
         synchronized (maps){
+            if(!maps.empty(newX,newY)){
+                if(maps.getContent(newX,newY).camp==Camp.DEAD){
+                    newX = location.getX() + rand.nextInt(3)-1;
+                    newY = location.getY() + rand.nextInt(3)-1;
+                }
+            }
             if(maps.empty(newX,newY)){
                 maps.setContent(location.getX(),location.getY(),null);
                 location = new Coordinate(newX,newY);
@@ -86,10 +121,12 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
                 case EVIL:musicfile = this.getClass().getClassLoader().getResource("media/damage1.mp3").toString();break;
                 case DEAD:return;
             }
+
             Media media2 = new Media(musicfile);
             MediaPlayer mp2 = new MediaPlayer(media2);
             mp2.play();
             double hp = maps.getContent(x,y).getHP_Remain();
+            maps.drawAtk(this,location.getX(),location.getY(),x,y);
             hp -= 30;
             if(hp<=0){
                 maps.getContent(x,y).setHP_Remain(0.1);
@@ -157,6 +194,10 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
 
     public void setCamp(Camp camp) {
         this.camp = camp;
+    }
+
+    public Image getImageAtk() {
+        return imageAtk;
     }
 }
 

@@ -20,6 +20,7 @@ public class CalabashBoy extends Creature implements Fighting{
         //System.out.println(this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg"));
         this.filePath = this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg");
         image = new Image(filePath.toString());
+        imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/fire.png").toString());
         setCamp(Camp.JUSTICE);  //阵营
     }
 

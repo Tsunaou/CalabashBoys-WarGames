@@ -25,6 +25,8 @@ public class DisplayField implements Runnable{
         s = this.getClass().getClassLoader().getResource("media/Shediao.mp3").toString();
         media = new Media(s);
         player = new MediaPlayer(media);
+        player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
+        player.setVolume(0.5);
         player.play();
     }
 
@@ -70,6 +72,8 @@ public class DisplayField implements Runnable{
                     String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
                     Media media2 = new Media(s2);
                     player = new MediaPlayer(media2);
+                    player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
+                    player.setVolume(0.5);
                     player.play();
                     System.err.println("人数小于10人");
                     dangerFlag = true;
@@ -81,6 +85,7 @@ public class DisplayField implements Runnable{
 
     public void run(){
         display();
+        player.stop();
     }
 
 }
