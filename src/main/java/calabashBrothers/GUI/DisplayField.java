@@ -23,11 +23,11 @@ public class DisplayField implements Runnable{
 
     public DisplayField(){
         s = this.getClass().getClassLoader().getResource("media/Shediao.mp3").toString();
-        media = new Media(s);
-        player = new MediaPlayer(media);
-        player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
-        player.setVolume(0.5);
-        player.play();
+//        media = new Media(s);
+//        player = new MediaPlayer(media);
+//        player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
+//        player.setVolume(0.5);
+//        player.play();
     }
 
     public static Maps<Creature> getMaps() {
@@ -66,19 +66,19 @@ public class DisplayField implements Runnable{
                     firstDisplay = false;
                 }
             }
-            synchronized (maps){
-                if(maps.getCounts()<=15 && !dangerFlag){
-                    player.stop();
-                    String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
-                    Media media2 = new Media(s2);
-                    player = new MediaPlayer(media2);
-                    player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
-                    player.setVolume(0.5);
-                    player.play();
-                    System.err.println("人数小于10人");
-                    dangerFlag = true;
-                }
-            }
+//            synchronized (maps){
+//                if(maps.getCounts()<=15 && !dangerFlag){
+//                    player.stop();
+//                    String s2 = this.getClass().getClassLoader().getResource("media/luffy.mp3").toString();
+//                    Media media2 = new Media(s2);
+//                    player = new MediaPlayer(media2);
+//                    player.setCycleCount(MediaPlayer.INDEFINITE); //设置循环播放（设置播放次数）
+//                    player.setVolume(0.5);
+//                    player.play();
+//                    System.err.println("人数小于10人");
+//                    dangerFlag = true;
+//                }
+//            }
             displaySleep(1000);
         }
     }

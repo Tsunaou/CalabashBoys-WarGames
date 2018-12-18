@@ -16,8 +16,12 @@ public class Grandpa extends Creature implements CheeringUp{
         image = new Image(filePath.toString());
         imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/leaf.png").toString());
         setCamp(Camp.JUSTICE);  //阵营
-        setHP_Remain(300);
-        setHP_All(300);
+        //设置属性
+        setHP_All(HP_Grandpa);
+        setHP_Remain(HP_Grandpa);
+        setATK(ATK_Grandpa);
+        setDEF(DEF_Grandpa);
+        setAtkScale(Scale_Grandpa);
     }
 
     @Override

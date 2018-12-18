@@ -15,6 +15,12 @@ public class Monster extends Creature implements Fighting{
         image = new Image(filePath.toString());
         imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/storm.png").toString());
         setCamp(Camp.EVIL);  //阵营
+        //设置属性
+        setHP_All(HP_Monster);
+        setHP_Remain(HP_Monster);
+        setATK(ATK_Monster);
+        setDEF(DEF_Monster);
+        setAtkScale(Scale_Monster);
     }
 
     @Override

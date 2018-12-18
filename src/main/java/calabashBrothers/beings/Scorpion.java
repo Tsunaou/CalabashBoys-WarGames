@@ -13,6 +13,13 @@ public class Scorpion extends Monster implements Fighting{
         this.filePath = this.getClass().getClassLoader().getResource("pic/scorpion.jpg");
         image = new Image(filePath.toString());
         imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/killer.png").toString());
+
+        //设置属性
+        setHP_All(HP_Scorpion);
+        setHP_Remain(HP_Scorpion);
+        setATK(ATK_Scorpion);
+        setDEF(DEF_Scorpion);
+        setAtkScale(Scale_Scorpion);
     }
 
     @Override

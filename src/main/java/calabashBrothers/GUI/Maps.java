@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -83,8 +84,11 @@ public class Maps<T extends Creature> implements Config{
 
     public void drawBoradLines(){
 
-        gc.setLineWidth(5);
+        gc.setFill(Color.rgb(255,255,255,0.4));
+        gc.fillRect(0,0,canvasWidth,canvasWidth);
 
+        gc.setLineWidth(1);
+        gc.setStroke(Color.BLACK);
         //绘制N*N的边界线
         for(int i=1;i<Height;i++){
             gc.strokeLine(i*UnitSize,0,i*UnitSize,canvasWidth);
@@ -105,7 +109,7 @@ public class Maps<T extends Creature> implements Config{
 
     public synchronized void showMaps(){
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
-//        drawBoradLines();
+        drawBoradLines();
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 T tmp = maps.get(i).get(j).getContent();
@@ -142,7 +146,7 @@ public class Maps<T extends Creature> implements Config{
                         }break;
                         case "DeathObject":{
                             System.out.print("D");
-                        }
+                        }break;
                         default:{
                             System.out.println("Error when showMaps");
                         }
@@ -251,9 +255,28 @@ public class Maps<T extends Creature> implements Config{
         return  res;
     }
 
+    //从(fromX,Y) to (x,y)的攻击波，左上角的坐标
     public void drawAtk(T t,int fromX,int fromY,int x,int y){
-        //从(fromX,Y) to (x,y)的攻击波
-        gc.drawImage(t.getImageAtk(),(fromY+y)/2*UnitSize,(fromX+x)/2*UnitSize,UnitSize/2,UnitSize/2);
-        gc.drawImage(t.getImageAtk(),y*UnitSize,x*UnitSize,UnitSize/2,UnitSize/2);
+        System.out.println("Atk:from"+"("+fromX+","+fromY+") to ("+x+","+y+")");
+        double centerFromX = (double) fromX*UnitSize+UnitSize/4; //起始方格中央
+        double centerFromY = (double) fromY*UnitSize+UnitSize/4; //起始方格中央
+        double centerTargetX = (double) x*UnitSize+UnitSize/4;   //目标方格中央
+        double centerTargetY = (double) y*UnitSize+UnitSize/4;   //目标方格中央
+        double centerX = (centerFromX+centerTargetX)/2; //中间方格中央
+        double centerY = (centerFromY+centerTargetY)/2; //中间方格中央
+
+        //攻击瞄准线
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(2);
+        gc.strokeLine(centerFromY+UnitSize/4,centerFromX+UnitSize/4,centerTargetY+UnitSize/4,centerTargetX+UnitSize/4);
+
+        //攻击动画
+        double picSize = UnitSize/2;
+//        gc.drawImage(t.getImageAtk(),centerFromY,centerFromX,UnitSize/2,UnitSize/2);
+        gc.drawImage(t.getImageAtk(),centerTargetY,centerTargetX,picSize,picSize);
+        gc.drawImage(t.getImageAtk(),centerY,centerX,picSize,picSize);
+//        gc.drawImage(t.getImageAtk(),(centerY+centerFromY)/2,(centerX+centerFromX)/2,picSize,picSize);
+        gc.drawImage(t.getImageAtk(),(centerY+centerTargetY)/2,(centerX+centerTargetX)/2,picSize,picSize);
+
     }
 }

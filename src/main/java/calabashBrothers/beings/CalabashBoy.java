@@ -17,11 +17,17 @@ public class CalabashBoy extends Creature implements Fighting{
         this.color = EnumCalabashBoy.values()[i].getColor();
         this.rank = EnumCalabashBoy.values()[i].getRank();
         int indexPic = rank+1;
-        //System.out.println(this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg"));
         this.filePath = this.getClass().getClassLoader().getResource("pic/"+indexPic+".jpg");
         image = new Image(filePath.toString());
         imageAtk = new Image(this.getClass().getClassLoader().getResource("pic/fire.png").toString());
         setCamp(Camp.JUSTICE);  //阵营
+
+        //设置属性
+        setHP_All(HP_Calabash);
+        setHP_Remain(HP_Calabash);
+        setATK(ATK_Calabash);
+        setDEF(DEF_Calabash);
+        setAtkScale(Scale_Calabash);
     }
 
     @Override
