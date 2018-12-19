@@ -59,7 +59,7 @@ public class BattleFieldController implements Config{
 
     public BattleFieldController() {
         initCreatures();
-        initFormation = 1;
+        initFormation = 0;
         fighting = false;
         setInitFormations(initFormation);
         player = new DisplayField();

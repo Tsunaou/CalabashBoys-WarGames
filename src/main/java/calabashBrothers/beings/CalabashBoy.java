@@ -39,5 +39,10 @@ public class CalabashBoy extends Creature implements Fighting{
     public int getRank() {
         return rank;
     }
+
+    @Override
+    public String toString() {
+        return super.toString()+this.rank;
+    }
 }
 
