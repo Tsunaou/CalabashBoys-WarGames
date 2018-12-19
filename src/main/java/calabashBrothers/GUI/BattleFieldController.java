@@ -204,4 +204,13 @@ public class BattleFieldController implements Config{
         initCanvas();
         maps.showMaps();
     }
+
+    public void gameReplay(ActionEvent actionEvent) {
+        synchronized (player){
+            player.setRunning(false);
+            player.setReplaying(true);
+            System.out.println("replay");
+        }
+
+    }
 }

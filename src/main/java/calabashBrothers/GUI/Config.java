@@ -41,7 +41,7 @@ public interface Config {
     final int Scale_Calabash = 1;
     final int Scale_Grandpa = 1;
     final int Scale_Monster = 1;
-    final int Scale_Scorpion = 1;
+    final int Scale_Scorpion = 3;
     final int Scale_Snake = 1;
 
 }

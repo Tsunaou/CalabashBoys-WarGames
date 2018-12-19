@@ -1,5 +1,8 @@
 package calabashBrothers.GUI;
 
+import calabashBrothers.GUI.Record.CreatureMap;
+import calabashBrothers.GUI.Record.ObjectRecord;
+import calabashBrothers.GUI.Record.Recorder;
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
 import calabashBrothers.beings.enums.Direction;
@@ -10,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,17 +23,23 @@ import java.util.concurrent.TimeUnit;
 public class Maps<T extends Creature> implements Config{
     private int rows;
     private int cols;
-    private ArrayList<ArrayList<unit<T>>> maps; //用容器表示二维数组，再加上泛型的unit，有点复杂感觉
+    private ArrayList<ArrayList<unit<Creature>>> maps; //用容器表示二维数组，再加上泛型的unit，有点复杂感觉
+    private ArrayList<Recorder> recordList = new ArrayList<>();     //用来保存战斗记录的List
 
+    //图形化的一些变量
     private static Canvas battleFiledCanvas;
     private static GraphicsContext gc;     //2D画布
     private static double canvasHeight;   //画布的高度
     private static double canvasWidth;    //画布的宽度
     private static double UnitSize;       //单位宽度
 
+    //游戏的一些变量
     private int justiceCounts;
     private int evilCounts;
     private boolean startFlag;
+
+    //记录变量
+    CreatureMap recordMaps = new CreatureMap();
 
     public static Canvas getBattleFiledCanvas() {
         return battleFiledCanvas;
@@ -49,11 +59,11 @@ public class Maps<T extends Creature> implements Config{
     public Maps(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        maps = new ArrayList<ArrayList<unit<T>>>();
+        maps = new ArrayList<ArrayList<unit<Creature>>>();
         for (int i = 0; i <rows ; i++) {
-            maps.add(new ArrayList<unit<T>>()); //增加一行
+            maps.add(new ArrayList<unit<Creature>>()); //增加一行
             for (int j = 0; j <cols ; j++) { //增加一列
-                maps.get(i).add(new unit<T>(i,j));
+                maps.get(i).add(new unit<Creature>(i,j));
             }
         }
         this.justiceCounts = 100;
@@ -69,7 +79,7 @@ public class Maps<T extends Creature> implements Config{
         return cols;
     }
 
-    public  T getContent(int x,int y){
+    public  Creature getContent(int x,int y){
         return maps.get(x).get(y).getContent();
     }
 
@@ -77,14 +87,14 @@ public class Maps<T extends Creature> implements Config{
         return  maps.get(x).get(y).none();
     }
 
-    synchronized public  void setContent(int x,int y,T content){
+    synchronized public  void setContent(int x,int y,Creature content){
         maps.get(x).get(y).setContent(content);
         if(content != null){
             content.setLocation(new Coordinate(x,y));
         }
     }
 
-    public ArrayList<ArrayList<unit<T>>> getMaps() {
+    public ArrayList<ArrayList<unit<Creature>>> getMaps() {
         return maps;
     }
 
@@ -113,6 +123,22 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
+    public void replayMaps(Recorder rc){
+        this.removeMaps();
+        Iterator<ObjectRecord> it = rc.getObjList().iterator();
+        while(it.hasNext()){
+            ObjectRecord obj = it.next();
+            int setX = obj.getPos().getX();
+            int setY = obj.getPos().getY();
+            Creature tmp = recordMaps.getClassByString(obj.getObject());
+            this.setContent(obj.getPos().getX(),obj.getPos().getY(), tmp);//不安全
+            if(tmp.getCamp()!=Camp.DEAD){
+                this.getContent(setX,setY).setHP_Remain(obj.getHP_Remain());
+            }
+        }
+        showMaps();
+    }
+
     public synchronized void showMaps(){
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
         drawBoradLines();
@@ -121,10 +147,17 @@ public class Maps<T extends Creature> implements Config{
             this.evilCounts = 0;
         }
         int notNullCnts=0;
+
+        Recorder recorder = new Recorder();
+
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
-                T tmp = maps.get(i).get(j).getContent();
+                Creature tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
+
+                    //保存
+                    recorder.addObjList(new ObjectRecord(tmp.toString(),tmp.getHP_Remain(),tmp.getLocation()));
+
                     gc.drawImage(tmp.getImage(),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
                     if(tmp.getCamp()!= Camp.DEAD){
                         gc.setStroke(Color.RED);
@@ -186,6 +219,7 @@ public class Maps<T extends Creature> implements Config{
         }
         System.out.println("刷新：justiceCounts:"+justiceCounts);
         System.out.println("刷新：evilCounts:"+evilCounts);
+        recordList.add(recorder);
 
     }
 
@@ -201,41 +235,18 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
-    ArrayList<T> getLives(){
-        ArrayList<T> res = new ArrayList<>();
+    ArrayList<Creature> getLives(){
+        ArrayList<Creature> res = new ArrayList<>();
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
                 synchronized (maps){
-                    T tmp = maps.get(i).get(j).getContent();
+                    Creature tmp = maps.get(i).get(j).getContent();
                     if(tmp!=null){
                         res.add(tmp);
                     }
                 }
             }
         }
-        return  res;
-    }
-
-    //得到maps中的存活的两方数量， TODO:可优化，给maps一个计数变量
-    ArrayList<Integer> getCounts(){
-        ArrayList<Integer> res = new ArrayList<Integer>();
-        int justiceCnts = 0;
-        int evilCnts = 0;
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<cols;j++){
-                synchronized (maps){
-                    if(maps.get(i).get(j).getContent()!=null){
-                        if(maps.get(i).get(j).getContent().getCamp()==Camp.JUSTICE){
-                            justiceCnts++;
-                        }else if(maps.get(i).get(j).getContent().getCamp()==Camp.EVIL){
-                            evilCnts++;
-                        }
-                    }
-                }
-            }
-        }
-        res.add(justiceCnts);
-        res.add(evilCnts);
         return  res;
     }
 
@@ -297,7 +308,7 @@ public class Maps<T extends Creature> implements Config{
     }
 
     //从(fromX,Y) to (x,y)的攻击波，左上角的坐标
-    public void drawAtk(T t,int fromX,int fromY,int x,int y,int damagePoints){
+    public void drawAtk(Creature t,int fromX,int fromY,int x,int y,int damagePoints){
         System.out.println("Atk:from"+"("+fromX+","+fromY+") to ("+x+","+y+")");
         double centerFromX = (double) fromX*UnitSize+UnitSize/4; //起始方格中央
         double centerFromY = (double) fromY*UnitSize+UnitSize/4; //起始方格中央
@@ -339,5 +350,9 @@ public class Maps<T extends Creature> implements Config{
         if(winner == Camp.EVIL)
             winPath=this.getClass().getClassLoader().getResource("pic/EvilWinner.jpg").toString();
         gc.drawImage(new Image(winPath),0,0,canvasWidth,canvasHeight);
+    }
+
+    public ArrayList<Recorder> getRecordList() {
+        return recordList;
     }
 }

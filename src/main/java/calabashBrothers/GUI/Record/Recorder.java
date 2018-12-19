@@ -20,4 +20,12 @@ public class Recorder {
     public void addAtkList(AtkRecord atk) {
         atkList.add(atk);
     }
+
+    public ArrayList<ObjectRecord> getObjList() {
+        return objList;
+    }
+
+    public ArrayList<AtkRecord> getAtkList() {
+        return atkList;
+    }
 }

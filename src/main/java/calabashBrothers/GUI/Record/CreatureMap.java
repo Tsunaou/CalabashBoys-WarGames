@@ -31,14 +31,17 @@ public class CreatureMap{
         creatures.add(new Monster());
         creatures.add(new Snake());
         creatures.add(new Scorpion());
+        creatures.add(new DeathObject());
 
         //开始添加映射关系
         for(int i=0;i<creatures.size();i++){
+//            System.out.println("Add mapping "+creatures.get(i).toString());
             creatureMaps.put(creatures.get(i).toString(),creatures.get(i));
         }
     }
 
-    static Creature getClassByString(String key){
+    public Creature getClassByString(String key){
+//        System.out.println("getClassByString "+key);
         return creatureMaps.get(key);
     }
 

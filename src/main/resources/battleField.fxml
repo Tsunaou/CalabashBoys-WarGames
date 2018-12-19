@@ -73,6 +73,7 @@
                         <Insets bottom="10.0" top="5.0" />
                     </VBox.margin>
                 </Button>
+            <Button fx:id="replayBotton" mnemonicParsing="false" onAction="#gameReplay" prefHeight="30.0" prefWidth="203.0" text="复盘" />
                 <Label id="FormationChoice" text="初始阵型选择">
                     <VBox.margin>
                         <Insets bottom="5.0" top="10.0" />

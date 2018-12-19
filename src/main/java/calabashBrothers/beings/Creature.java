@@ -34,7 +34,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
 
     //线程相关
     private boolean Living;    //是否存活
-    public static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
+    public static Maps maps;   //static变量，所有的生物共享一个maps
 
     public Creature(String name) {
         super(name);

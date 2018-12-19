@@ -1,11 +1,13 @@
 package calabashBrothers.GUI;
 
+import calabashBrothers.GUI.Record.Recorder;
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +19,9 @@ public class DisplayField implements Runnable{
 
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
     private boolean Running = true;
+    private boolean Replaying = false;
     private boolean firstDisplay = true;
+    private boolean fightingEnd = false;
     private String s;
     private Media media;
     private MediaPlayer player;
@@ -46,8 +50,12 @@ public class DisplayField implements Runnable{
 
     public void setRunning(boolean running) {
         Running = running;
+        System.out.println("Display running false");
     }
 
+    public void setReplaying(boolean replaying) {
+        Replaying = replaying;
+    }
 
     private void displaySleep(int ms){
         try{
@@ -92,11 +100,13 @@ public class DisplayField implements Runnable{
                     maps.gameOver(Camp.EVIL);
                     changeMusic("media/lose.mp3",false);
                     this.Running = false;
+                    fightingEnd = true;
                 }
                 if(evilCnts==0 && justiceCnts!=0){
                     maps.gameOver(Camp.JUSTICE);
                     changeMusic("media/win.mp3",false);
                     this.Running = false;
+                    fightingEnd = true;
                 }
 
             }
@@ -104,9 +114,48 @@ public class DisplayField implements Runnable{
         }
     }
 
+    void replay(){
+        ArrayList<Recorder> recorder = new ArrayList<>();
+
+        boolean endFlag = false;
+        if(!endFlag){
+            synchronized (maps){
+                recorder = maps.getRecordList();
+                System.out.println("getRecordList");
+                if(!fightingEnd){
+                    maps.gameOver(Camp.JUSTICE);
+                }
+                player.stop();
+                endFlag = true;
+            }
+        }
+
+
+//        Iterator<Recorder> it = recorder.iterator(); //同时写异常
+
+        if(Replaying){
+            System.out.println("Replaying,size="+recorder.size());
+            int END_SIZE = recorder.size();
+            for (int i=0;i<END_SIZE;i++){
+                synchronized (maps){
+                    System.out.println("replayMaps,i="+i);
+                    maps.replayMaps(recorder.get(i));
+                }
+                displaySleep(1000);
+                if(i>=recorder.size()){
+                    break;
+                }
+            }
+            Replaying = false;
+            System.out.println("Replaying Ending");
+        }
+    }
+
     public void run(){
         display();
-//        player.stop();
+        //状态切换后才会回放
+        System.out.println("Display Run");
+        replay();
     }
 
 }
