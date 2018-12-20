@@ -120,16 +120,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
             System.out.println("蝎子精也能攻击？");
         }
         synchronized (maps){
-            String musicfile = "";
-            switch (maps.getContent(x,y).getCamp()){
-                case JUSTICE: musicfile = this.getClass().getClassLoader().getResource("media/weapons.mp3").toString();break;
-                case EVIL:musicfile = this.getClass().getClassLoader().getResource("media/damage1.mp3").toString();break;
-                case DEAD:return;
-            }
 
-            Media media2 = new Media(musicfile);
-            MediaPlayer mp2 = new MediaPlayer(media2);
-            mp2.play();
             double hp = maps.getContent(x,y).getHP_Remain();
             double dagamePoints = DAMAGE_PER*this.getATK()/maps.getContent(x,y).getDEF();
             maps.drawAtk(this,location.getX(),location.getY(),x,y,(int)dagamePoints);

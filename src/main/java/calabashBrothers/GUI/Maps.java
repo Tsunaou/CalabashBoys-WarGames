@@ -1,5 +1,6 @@
 package calabashBrothers.GUI;
 
+import calabashBrothers.GUI.Record.AtkRecord;
 import calabashBrothers.GUI.Record.CreatureMap;
 import calabashBrothers.GUI.Record.ObjectRecord;
 import calabashBrothers.GUI.Record.Recorder;
@@ -9,8 +10,9 @@ import calabashBrothers.beings.enums.Direction;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,38 +26,27 @@ public class Maps<T extends Creature> implements Config{
     private int rows;
     private int cols;
     private ArrayList<ArrayList<unit<Creature>>> maps; //用容器表示二维数组，再加上泛型的unit，有点复杂感觉
-    private ArrayList<Recorder> recordList = new ArrayList<>();     //用来保存战斗记录的List
 
     //图形化的一些变量
-    private static Canvas battleFiledCanvas;
-    private static GraphicsContext gc;     //2D画布
-    private static double canvasHeight;   //画布的高度
-    private static double canvasWidth;    //画布的宽度
-    private static double UnitSize;       //单位宽度
+    private static Canvas battleFiledCanvas; //主界面的Canvas
+    private static GraphicsContext gc;       //2D画布
+    private static double canvasHeight;     //画布的高度
+    private static double canvasWidth;      //画布的宽度
+    private static double UnitSize;         //单位宽度
 
     //游戏的一些变量
-    private int justiceCounts;
-    private int evilCounts;
-    private boolean startFlag;
+    private int justiceCounts;  //正方数目
+    private int evilCounts;     //反方数目
+    private boolean startFlag;  //游戏是否开始
 
     //记录变量
-    CreatureMap recordMaps = new CreatureMap();
+    private ArrayList<Recorder> recordList = new ArrayList<>();     //用来保存战斗记录的List
+    private Recorder recorder = new Recorder();                     //用来保存每回合的记录
+//    private ArrayList<AtkRecord> atkList = new ArrayList<>();       //保存每回合的战斗记录
+    CreatureMap recordMaps = new CreatureMap(); //映射器
 
-    public static Canvas getBattleFiledCanvas() {
-        return battleFiledCanvas;
-    }
 
-    public static void setBattleFiledCanvas(Canvas battleFiledCanvas) {
-        Maps.battleFiledCanvas = battleFiledCanvas;
-        //基本参数
-        Maps.canvasHeight = battleFiledCanvas.getHeight();
-        Maps.canvasWidth = battleFiledCanvas.getWidth();
-        Maps.UnitSize = canvasHeight/Height;
-        assert(UnitSize != canvasWidth/Width);
-        System.out.println("Canvas:Heitht="+canvasHeight+",Width="+canvasWidth);
-        gc = battleFiledCanvas.getGraphicsContext2D();
-    }
-
+    //构造函数
     public Maps(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
@@ -71,22 +62,44 @@ public class Maps<T extends Creature> implements Config{
         this.startFlag  = false;
     }
 
+    //得到画布
+    public static Canvas getBattleFiledCanvas() {
+        return battleFiledCanvas;
+    }
+
+    //设置画布
+    public static void setBattleFiledCanvas(Canvas battleFiledCanvas) {
+        Maps.battleFiledCanvas = battleFiledCanvas;
+        //基本参数
+        Maps.canvasHeight = battleFiledCanvas.getHeight();
+        Maps.canvasWidth = battleFiledCanvas.getWidth();
+        Maps.UnitSize = canvasHeight/Height;
+        assert(UnitSize != canvasWidth/Width);
+        System.out.println("Canvas:Heitht="+canvasHeight+",Width="+canvasWidth);
+        gc = battleFiledCanvas.getGraphicsContext2D();
+    }
+
+    //得到Rows
     public int getRows() {
         return rows;
     }
 
+    //得到Cols
     public int getCols() {
         return cols;
     }
 
+    //得到某处的生物
     public  Creature getContent(int x,int y){
         return maps.get(x).get(y).getContent();
     }
 
+    //判断某处是否为null
     public boolean empty(int x,int y){
         return  maps.get(x).get(y).none();
     }
 
+    //在x,y上放置生物
     synchronized public  void setContent(int x,int y,Creature content){
         maps.get(x).get(y).setContent(content);
         if(content != null){
@@ -94,10 +107,12 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
+    //得到maps
     public ArrayList<ArrayList<unit<Creature>>> getMaps() {
         return maps;
     }
 
+    //绘制战场背景和方格
     private void drawBoradLines(){
 
         gc.setFill(Color.rgb(255,255,255,0.4));
@@ -115,6 +130,7 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
+    //封装的Sleep函数
     private void displaySleep(int ms){
         try{
             TimeUnit.MILLISECONDS.sleep(ms);
@@ -123,11 +139,13 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
-    public void replayMaps(Recorder rc){
+    //对于一帧的记录文件，打印文件内容
+    synchronized public void replayMaps(Recorder rc){
         this.removeMaps();
-        Iterator<ObjectRecord> it = rc.getObjList().iterator();
-        while(it.hasNext()){
-            ObjectRecord obj = it.next();
+        //画方格里的对象
+        Iterator<ObjectRecord> itObj = rc.getObjList().iterator();
+        while(itObj.hasNext()){
+            ObjectRecord obj = itObj.next();
             int setX = obj.getPos().getX();
             int setY = obj.getPos().getY();
             Creature tmp = recordMaps.getClassByString(obj.getObject());
@@ -137,8 +155,52 @@ public class Maps<T extends Creature> implements Config{
             }
         }
         showMaps();
+        //画攻击
+        Iterator<AtkRecord> itAtk = rc.getAtkList().iterator();
+        while(itAtk.hasNext()){
+            AtkRecord atk = itAtk.next();
+            Creature tmp = recordMaps.getClassByString(atk.getAttaker());
+            int fromX = atk.getAtkFrom().getX();
+            int fromY = atk.getAtkFrom().getY();
+            int x = atk.getAtkTo().getX();
+            int y = atk.getAtkTo().getY();
+            this.drawAtk(tmp,fromX,fromY,x,y,0);
+        }
     }
 
+    //打印console里的字符
+    public synchronized void showConsoleMaps(String types){
+        switch (types){
+            case "CalabashBoy":{
+                System.out.print("C");
+            }break;
+
+            case "Grandpa":{
+                System.out.print("G");
+            }break;
+
+            case "Monster":{
+                System.out.print("M");
+            }break;
+
+            case "Scorpion": {
+                System.out.print("L");
+            }break;
+
+            case"Snake":{
+                System.out.print("S");
+            }break;
+            case "DeathObject":{
+                System.out.print("D");
+            }break;
+            default:{
+                System.out.println("Error when showMaps");
+            }
+
+        }
+    }
+
+    //打印战场实况，一个很重要的函数
     public synchronized void showMaps(){
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
         drawBoradLines();
@@ -148,17 +210,17 @@ public class Maps<T extends Creature> implements Config{
         }
         int notNullCnts=0;
 
-        Recorder recorder = new Recorder();
 
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
                 Creature tmp = maps.get(i).get(j).getContent();
                 if( tmp != null){
 
-                    //保存
+                    //保存生物信息
                     recorder.addObjList(new ObjectRecord(tmp.toString(),tmp.getHP_Remain(),tmp.getLocation()));
-
+                    //画生物图片
                     gc.drawImage(tmp.getImage(),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
+                    //画血量条
                     if(tmp.getCamp()!= Camp.DEAD){
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
@@ -167,45 +229,20 @@ public class Maps<T extends Creature> implements Config{
                         gc.strokeLine(j*UnitSize, i*UnitSize, (j+tmp.getHP_Remain()/tmp.getHP_All())*UnitSize, i*UnitSize);
                     }
 
+                    //一些额外处理
                     if(!startFlag){
                         notNullCnts++;
                     }
 
+                    //计算人数
                     if(tmp.getCamp() == Camp.JUSTICE){
                         justiceCounts++;
                     }else if(tmp.getCamp() == Camp.EVIL){
                         evilCounts++;
                     }
 
+                    showConsoleMaps(tmp.getClass().getSimpleName());
 
-                    switch (tmp.getClass().getSimpleName()){
-                        case "CalabashBoy":{
-                            System.out.print("C");
-                        }break;
-
-                        case "Grandpa":{
-                            System.out.print("G");
-                        }break;
-
-                        case "Monster":{
-                            System.out.print("M");
-                        }break;
-
-                        case "Scorpion": {
-                            System.out.print("L");
-                        }break;
-
-                        case"Snake":{
-                            System.out.print("S");
-                        }break;
-                        case "DeathObject":{
-                            System.out.print("D");
-                        }break;
-                        default:{
-                            System.out.println("Error when showMaps");
-                        }
-
-                    }
                 }else{
                     System.out.print("-");
                 }
@@ -220,13 +257,16 @@ public class Maps<T extends Creature> implements Config{
         System.out.println("刷新：justiceCounts:"+justiceCounts);
         System.out.println("刷新：evilCounts:"+evilCounts);
         recordList.add(recorder);
+        recorder = new Recorder();
 
     }
 
+    //清空画布内容
     public synchronized void refreshMaps(){
         gc.clearRect(0,0,canvasWidth,canvasHeight);//每次刷新时删除
     }
 
+    //删除当前地图所有的对象
     public void removeMaps(){
         for (int i = 0; i <rows ; i++) {
             for (int j = 0; j <cols ; j++) {
@@ -235,6 +275,7 @@ public class Maps<T extends Creature> implements Config{
         }
     }
 
+    //得到战场里所有的生物
     ArrayList<Creature> getLives(){
         ArrayList<Creature> res = new ArrayList<>();
         for(int i=0;i<rows;i++){
@@ -250,15 +291,17 @@ public class Maps<T extends Creature> implements Config{
         return  res;
     }
 
+    //得到正方阵营的数量
     public int getJusticeCounts() {
         return justiceCounts;
     }
 
+    //得到反方阵营的数量
     public int getEvilCounts() {
         return evilCounts;
     }
 
-    //寻找敌人的函数
+    //自动寻找敌人方向
     public Direction getEnemyDirection(int centerX, int centerY){
         Camp myCemp = maps.get(centerX).get(centerY).getContent().getCamp();
         //上下左右扫描
@@ -307,8 +350,18 @@ public class Maps<T extends Creature> implements Config{
         return  res;
     }
 
+    //增加一条攻击记录
+    public void addAtkRecord(Creature t,int fromX,int fromY,int x,int y,int damagePoints){
+        System.out.println("记录了：Atk:from"+"("+fromX+","+fromY+") to ("+x+","+y+")");
+        recorder.addAtkList(new AtkRecord(t.toString(),new Coordinate(fromX,fromY),new Coordinate(x,y)));
+    }
+
+
     //从(fromX,Y) to (x,y)的攻击波，左上角的坐标
     public void drawAtk(Creature t,int fromX,int fromY,int x,int y,int damagePoints){
+
+        addAtkRecord(t,fromX,fromY,x,y,damagePoints);
+
         System.out.println("Atk:from"+"("+fromX+","+fromY+") to ("+x+","+y+")");
         double centerFromX = (double) fromX*UnitSize+UnitSize/4; //起始方格中央
         double centerFromY = (double) fromY*UnitSize+UnitSize/4; //起始方格中央
@@ -318,9 +371,9 @@ public class Maps<T extends Creature> implements Config{
         double centerY = (centerFromY+centerTargetY)/2; //中间方格中央
 
         //攻击瞄准线
-        gc.setStroke(Color.WHITE);
-        gc.setLineWidth(2);
-        gc.strokeLine(centerFromY+UnitSize/4,centerFromX+UnitSize/4,centerTargetY+UnitSize/4,centerTargetX+UnitSize/4);
+//        gc.setStroke(Color.WHITE);
+//        gc.setLineWidth(2);
+//        gc.strokeLine(centerFromY+UnitSize/4,centerFromX+UnitSize/4,centerTargetY+UnitSize/4,centerTargetX+UnitSize/4);
 
         //攻击动画
         double picSize = UnitSize/2;
@@ -328,12 +381,24 @@ public class Maps<T extends Creature> implements Config{
         gc.setFill(Color.RED);
 //        gc.fillText("HP-"+damagePoints,centerTargetY,centerTargetX,UnitSize*0.75);
         gc.drawImage(t.getImageAtk(),centerTargetY,centerTargetX,picSize,picSize);
-        gc.drawImage(t.getImageAtk(),centerY,centerX,picSize,picSize);
+//        gc.drawImage(t.getImageAtk(),centerY,centerX,picSize,picSize);
 //        gc.drawImage(t.getImageAtk(),(centerY+centerFromY)/2,(centerX+centerFromX)/2,picSize,picSize);
         gc.drawImage(t.getImageAtk(),(centerY+centerTargetY)/2,(centerX+centerTargetX)/2,picSize,picSize);
 
+        String musicfile = "";
+        switch (t.getCamp()){
+            case JUSTICE: musicfile = this.getClass().getClassLoader().getResource("media/weapons.mp3").toString();break;
+            case EVIL:musicfile = this.getClass().getClassLoader().getResource("media/damage1.mp3").toString();break;
+            case DEAD:return;
+        }
+
+        Media media2 = new Media(musicfile);
+        MediaPlayer mp2 = new MediaPlayer(media2);
+        mp2.play();
+
     }
 
+    //游戏结束，同时打印结束图片和播放结束音乐
     public void gameOver(Camp winner){
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
@@ -352,6 +417,7 @@ public class Maps<T extends Creature> implements Config{
         gc.drawImage(new Image(winPath),0,0,canvasWidth,canvasHeight);
     }
 
+    //得到游戏记录列表
     public ArrayList<Recorder> getRecordList() {
         return recordList;
     }

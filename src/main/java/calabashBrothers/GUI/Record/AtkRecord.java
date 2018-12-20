@@ -1,7 +1,6 @@
 package calabashBrothers.GUI.Record;
 
 import calabashBrothers.GUI.Coordinate;
-import calabashBrothers.beings.Creature;
 
 /**
  * @ Author     ：Young
@@ -11,12 +10,12 @@ import calabashBrothers.beings.Creature;
 public class AtkRecord {
     private String attaker;//攻击者
     private Coordinate atkFrom; //攻击者的坐标
-    private Coordinate atrTo;   //被攻击者的坐标
+    private Coordinate atkTo;   //被攻击者的坐标
 
     public AtkRecord(String attaker, Coordinate atkFrom, Coordinate atrTo) {
         this.attaker = attaker;
         this.atkFrom = atkFrom;
-        this.atrTo = atrTo;
+        this.atkTo = atrTo;
     }
 
     public String getAttaker() {
@@ -27,7 +26,7 @@ public class AtkRecord {
         return atkFrom;
     }
 
-    public Coordinate getAtrTo() {
-        return atrTo;
+    public Coordinate getAtkTo() {
+        return atkTo;
     }
 }

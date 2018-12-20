@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class DisplayField implements Runnable{
 
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
+    private int DISPLAY_HZ = 250;       //刷新频率
     private boolean Running = true;
     private boolean Replaying = false;
     private boolean firstDisplay = true;
@@ -114,7 +115,7 @@ public class DisplayField implements Runnable{
                 }
 
             }
-            displaySleep(1000);
+            displaySleep(DISPLAY_HZ);
         }
     }
 
@@ -134,7 +135,7 @@ public class DisplayField implements Runnable{
         }
 
 
-//        Iterator<Recorder> it = recorder.iterator(); //同时写异常
+//        Iterator<Recorder> it = recorder.iterator(); //由于迭代器的实现机制，会触发同时写异常
 
         if(Replaying){
             System.out.println("Replaying,size="+recorder.size());
@@ -144,7 +145,7 @@ public class DisplayField implements Runnable{
                     System.out.println("replayMaps,i="+i);
                     maps.replayMaps(recorder.get(i));
                 }
-                displaySleep(1000);
+                displaySleep(DISPLAY_HZ);
                 if(i>=recorder.size()){
                     break;
                 }
