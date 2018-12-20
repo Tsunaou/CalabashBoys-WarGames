@@ -25,6 +25,7 @@ public class DisplayField implements Runnable{
     private String s;
     private Media media;
     private MediaPlayer player;
+    ArrayList<Recorder> recorder = new ArrayList<>();   //回放记录存储
 
 
     public DisplayField(){
@@ -50,11 +51,12 @@ public class DisplayField implements Runnable{
 
     public void setRunning(boolean running) {
         Running = running;
-        System.out.println("Display running false");
+        System.out.println("1.Display running false");
     }
 
     public void setReplaying(boolean replaying) {
         Replaying = replaying;
+        System.out.println("2.Display setReplaying ture");
     }
 
     private void displaySleep(int ms){
@@ -101,12 +103,14 @@ public class DisplayField implements Runnable{
                     changeMusic("media/lose.mp3",false);
                     this.Running = false;
                     fightingEnd = true;
+                    Replaying = true;
                 }
                 if(evilCnts==0 && justiceCnts!=0){
                     maps.gameOver(Camp.JUSTICE);
                     changeMusic("media/win.mp3",false);
                     this.Running = false;
                     fightingEnd = true;
+                    Replaying = true;
                 }
 
             }
@@ -115,7 +119,6 @@ public class DisplayField implements Runnable{
     }
 
     void replay(){
-        ArrayList<Recorder> recorder = new ArrayList<>();
 
         boolean endFlag = false;
         if(!endFlag){
