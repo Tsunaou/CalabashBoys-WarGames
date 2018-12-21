@@ -113,6 +113,9 @@ public class DisplayField implements Runnable{
                     fightingEnd = true;
                     Replaying = true;
                 }
+                if(fightingEnd){
+                    displaySleep(3000);
+                }
 
             }
             displaySleep(DISPLAY_HZ);
@@ -138,6 +141,7 @@ public class DisplayField implements Runnable{
 //        Iterator<Recorder> it = recorder.iterator(); //由于迭代器的实现机制，会触发同时写异常
 
         if(Replaying){
+            changeMusic("media/Shediao.mp3",true);
             System.out.println("Replaying,size="+recorder.size());
             int END_SIZE = recorder.size();
             for (int i=0;i<END_SIZE;i++){

@@ -1,5 +1,6 @@
 package calabashBrothers.GUI;
 
+import calabashBrothers.GUI.Record.RecorderSystem;
 import calabashBrothers.beings.*;
 
 import calabashBrothers.formation.*;
@@ -8,11 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -56,6 +57,9 @@ public class BattleFieldController implements Config{
     private Button startBotton;     //开始的按钮
     @FXML
     public Label initFormationText;//展示初始阵型的信息
+
+    @FXML
+    private BorderPane mainPaneWindow;
 
     public BattleFieldController() {
         initCreatures();
@@ -205,12 +209,22 @@ public class BattleFieldController implements Config{
         maps.showMaps();
     }
 
+    //主动复盘
     public void gameReplay(ActionEvent actionEvent) {
         synchronized (player){
             player.setRunning(false);
             player.setReplaying(true);
             System.out.println("replay");
         }
+
+    }
+
+    //读取文件复盘
+    public void getGameRecord(ActionEvent actionEvent) {
+        System.out.println("读取复盘");
+        RecorderSystem rs = new RecorderSystem(mainPaneWindow.getScene().getWindow());
+        rs.openRecord();
+        rs.saveRecord();
 
     }
 }
