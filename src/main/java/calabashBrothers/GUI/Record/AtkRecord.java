@@ -2,12 +2,14 @@ package calabashBrothers.GUI.Record;
 
 import calabashBrothers.GUI.Coordinate;
 
+import java.io.Serializable;
+
 /**
  * @ Author     ：Young
  * @ Date       ：Created in 20:58 2018/12/19
  * @ Description：攻击的记录容器
  */
-public class AtkRecord {
+public class AtkRecord implements Serializable {
     private String attaker;//攻击者
     private Coordinate atkFrom; //攻击者的坐标
     private Coordinate atkTo;   //被攻击者的坐标
@@ -28,5 +30,14 @@ public class AtkRecord {
 
     public Coordinate getAtkTo() {
         return atkTo;
+    }
+
+    @Override
+    public String toString() {
+        return "AtkRecord{" +
+                "attaker='" + attaker + '\'' +
+                ", atkFrom=" + atkFrom +
+                ", atkTo=" + atkTo +
+                '}';
     }
 }

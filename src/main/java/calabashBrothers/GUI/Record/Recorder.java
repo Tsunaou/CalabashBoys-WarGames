@@ -1,5 +1,6 @@
 package calabashBrothers.GUI.Record;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * @ Description：记录战斗记录（每次刷新画面时保存一次）
  *                  记录包括：Ojbect记录和Atk记录
  */
-public class Recorder {
+public class Recorder implements Serializable {
 
     ArrayList<ObjectRecord> objList = new ArrayList<>();
     ArrayList<AtkRecord> atkList = new ArrayList<>();
@@ -27,5 +28,13 @@ public class Recorder {
 
     public ArrayList<AtkRecord> getAtkList() {
         return atkList;
+    }
+
+    @Override
+    public String toString() {
+        return "Recorder{" +
+                "objList=" + objList +
+                ", atkList=" + atkList +
+                '}';
     }
 }

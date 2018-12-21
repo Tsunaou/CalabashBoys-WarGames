@@ -1,9 +1,6 @@
 package calabashBrothers.GUI;
 
-import calabashBrothers.GUI.Record.AtkRecord;
-import calabashBrothers.GUI.Record.CreatureMap;
-import calabashBrothers.GUI.Record.ObjectRecord;
-import calabashBrothers.GUI.Record.Recorder;
+import calabashBrothers.GUI.Record.*;
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
 import calabashBrothers.beings.enums.Direction;
@@ -13,10 +10,12 @@ import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.stage.Window;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * @ Author     ：Young
@@ -399,7 +398,7 @@ public class Maps<T extends Creature> implements Config{
     }
 
     //游戏结束，同时打印结束图片和播放结束音乐
-    public void gameOver(Camp winner){
+    public void gameOver(Camp winner,Window window){
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
                 synchronized (maps){
@@ -415,6 +414,8 @@ public class Maps<T extends Creature> implements Config{
         if(winner == Camp.EVIL)
             winPath=this.getClass().getClassLoader().getResource("pic/EvilWinner.jpg").toString();
         gc.drawImage(new Image(winPath),0,0,canvasWidth,canvasHeight);
+        RecorderSystem rs = new RecorderSystem(window);
+        rs.saveRecord(recordList);
     }
 
     //得到游戏记录列表

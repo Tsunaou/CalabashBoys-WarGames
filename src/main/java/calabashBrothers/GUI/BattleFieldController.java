@@ -1,5 +1,6 @@
 package calabashBrothers.GUI;
 
+import calabashBrothers.GUI.Record.Recorder;
 import calabashBrothers.GUI.Record.RecorderSystem;
 import calabashBrothers.beings.*;
 
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -92,6 +94,7 @@ public class BattleFieldController implements Config{
         //对Creature的画布和Maps里的Canvas初始化（类的静态变量，直接设置）
         Maps.setBattleFiledCanvas(mainCanvas);
         Creature.setMaps(maps);
+        player.setWindow(mainPaneWindow.getScene().getWindow());
     }
 
     //初始阵型
@@ -223,8 +226,6 @@ public class BattleFieldController implements Config{
     public void getGameRecord(ActionEvent actionEvent) {
         System.out.println("读取复盘");
         RecorderSystem rs = new RecorderSystem(mainPaneWindow.getScene().getWindow());
-        rs.openRecord();
-        rs.saveRecord();
-
+        ArrayList<Recorder> gameRecords = rs.openRecord();
     }
 }

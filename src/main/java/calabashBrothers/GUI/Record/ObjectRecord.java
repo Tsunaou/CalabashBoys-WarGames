@@ -3,12 +3,14 @@ package calabashBrothers.GUI.Record;
 import calabashBrothers.GUI.Coordinate;
 import calabashBrothers.beings.Creature;
 
+import java.io.Serializable;
+
 /**
  * @ Author     ：Young
  * @ Date       ：Created in 21:01 2018/12/19
  * @ Description：场上人物的容器
  */
-public class ObjectRecord {
+public class ObjectRecord implements Serializable {
 
     private String object;    //是谁
     private double HP_Remain;
@@ -30,5 +32,14 @@ public class ObjectRecord {
 
     public Coordinate getPos() {
         return pos;
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectRecord{" +
+                "object='" + object + '\'' +
+                ", HP_Remain=" + HP_Remain +
+                ", pos=" + pos +
+                '}';
     }
 }

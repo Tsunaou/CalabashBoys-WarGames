@@ -1,13 +1,14 @@
 package calabashBrothers.GUI;
 
 import calabashBrothers.GUI.Record.Recorder;
+import calabashBrothers.GUI.Record.RecorderSystem;
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
+import javafx.stage.Window;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,6 +29,8 @@ public class DisplayField implements Runnable{
     private MediaPlayer player;
     ArrayList<Recorder> recorder = new ArrayList<>();   //回放记录存储
 
+    private Window window;  //窗口
+    private boolean windowFlag = false;
 
     public DisplayField(){
         s = this.getClass().getClassLoader().getResource("media/Shediao.mp3").toString();
@@ -60,6 +63,11 @@ public class DisplayField implements Runnable{
         System.out.println("2.Display setReplaying ture");
     }
 
+    public void setWindow(Window window) {
+        this.window = window;
+        windowFlag = true;
+    }
+
     private void displaySleep(int ms){
         try{
             TimeUnit.MILLISECONDS.sleep(ms);
@@ -68,7 +76,7 @@ public class DisplayField implements Runnable{
         }
     }
 
-    void changeMusic(String url,boolean replay){
+    private void changeMusic(String url, boolean replay){
         player.stop();
         String s2 = this.getClass().getClassLoader().getResource(url).toString();
         Media media2 = new Media(s2);
@@ -80,7 +88,7 @@ public class DisplayField implements Runnable{
         player.play();
     }
 
-    void display(){
+    private void display(){
         boolean dangerFlag = false;
         while (Running){
             synchronized (maps){
@@ -100,14 +108,14 @@ public class DisplayField implements Runnable{
                     dangerFlag = true;
                 }
                 if(justiceCnts==0 && evilCnts!=0){
-                    maps.gameOver(Camp.EVIL);
+                    maps.gameOver(Camp.EVIL,window);
                     changeMusic("media/lose.mp3",false);
                     this.Running = false;
                     fightingEnd = true;
                     Replaying = true;
                 }
                 if(evilCnts==0 && justiceCnts!=0){
-                    maps.gameOver(Camp.JUSTICE);
+                    maps.gameOver(Camp.JUSTICE,window);
                     changeMusic("media/win.mp3",false);
                     this.Running = false;
                     fightingEnd = true;
@@ -130,7 +138,7 @@ public class DisplayField implements Runnable{
                 recorder = maps.getRecordList();
                 System.out.println("getRecordList");
                 if(!fightingEnd){
-                    maps.gameOver(Camp.JUSTICE);
+                    maps.gameOver(Camp.JUSTICE,window);
                 }
                 player.stop();
                 endFlag = true;
