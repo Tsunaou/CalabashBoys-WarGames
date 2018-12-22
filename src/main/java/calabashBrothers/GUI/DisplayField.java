@@ -49,7 +49,7 @@ public class DisplayField implements Runnable{
         DisplayField.maps = maps;
     }
 
-    public boolean isRunning() {
+    public boolean getRunning() {
         return Running;
     }
 
@@ -66,6 +66,10 @@ public class DisplayField implements Runnable{
     public void setWindow(Window window) {
         this.window = window;
         windowFlag = true;
+    }
+
+    public void setRecorder(ArrayList<Recorder> recorder) {
+        this.recorder = recorder;
     }
 
     private void displaySleep(int ms){
@@ -87,6 +91,25 @@ public class DisplayField implements Runnable{
         player.setVolume(0.5);
         player.play();
     }
+
+    public void replayRecordList( ArrayList<Recorder> r){
+        changeMusic("media/Shediao.mp3",true);
+        System.out.println("Replaying,size="+r.size());
+        int END_SIZE = r.size();
+        for (int i=0;i<END_SIZE;i++){
+            synchronized (maps){
+                System.out.println("replayMaps,i="+i);
+                maps.replayMaps(r.get(i));
+            }
+            displaySleep(DISPLAY_HZ);
+            if(i>=r.size()){
+                break;
+            }
+        }
+        Replaying = false;
+        System.out.println("Replaying Ending");
+    }
+
 
     private void display(){
         boolean dangerFlag = false;
@@ -132,46 +155,34 @@ public class DisplayField implements Runnable{
 
     void replay(){
 
-        boolean endFlag = false;
-        if(!endFlag){
-            synchronized (maps){
-                recorder = maps.getRecordList();
-                System.out.println("getRecordList");
-                if(!fightingEnd){
-                    maps.gameOver(Camp.JUSTICE,window);
-                }
-                player.stop();
-                endFlag = true;
-            }
-        }
+//        synchronized (maps){
+//            recorder = maps.getRecordList();
+//            System.out.println("getRecordList");
+//            if(!fightingEnd){
+//                maps.gameOver(Camp.JUSTICE,window);
+//            }
+//            player.stop();
+//        }
 
 
 //        Iterator<Recorder> it = recorder.iterator(); //由于迭代器的实现机制，会触发同时写异常
 
         if(Replaying){
-            changeMusic("media/Shediao.mp3",true);
-            System.out.println("Replaying,size="+recorder.size());
-            int END_SIZE = recorder.size();
-            for (int i=0;i<END_SIZE;i++){
-                synchronized (maps){
-                    System.out.println("replayMaps,i="+i);
-                    maps.replayMaps(recorder.get(i));
-                }
-                displaySleep(DISPLAY_HZ);
-                if(i>=recorder.size()){
-                    break;
-                }
-            }
-            Replaying = false;
-            System.out.println("Replaying Ending");
+            this.replayRecordList(recorder);
         }
     }
 
     public void run(){
-        display();
-        //状态切换后才会回放
-        System.out.println("Display Run");
-        replay();
+        //不断监听外界行为
+        while(true){
+            display();
+            //等待外界的回放信号
+            while (!Replaying){
+                displaySleep(500);
+            }
+            replay();
+            Replaying = false;
+        }
     }
 
 }

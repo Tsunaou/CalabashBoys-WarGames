@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,6 +51,8 @@ public class BattleFieldController implements Config{
 
     //展示类
     DisplayField player;
+    //控制行为
+    boolean initCanvasFlag = false;//是否被初始化
 
     @FXML
     private Canvas mainCanvas;      //主画布
@@ -91,6 +92,7 @@ public class BattleFieldController implements Config{
     }
     //初始化画布信息
     private void initCanvas(){
+        initCanvasFlag = true;
         //对Creature的画布和Maps里的Canvas初始化（类的静态变量，直接设置）
         Maps.setBattleFiledCanvas(mainCanvas);
         Creature.setMaps(maps);
@@ -152,17 +154,19 @@ public class BattleFieldController implements Config{
 
         if(!fighting){
             fighting = true;
-            initCanvas();
-            ExecutorService exec = Executors.newCachedThreadPool();
-            exec.execute(player);
+            if(!initCanvasFlag){
+                initCanvas();
+                ExecutorService exec = Executors.newCachedThreadPool();
+                exec.execute(player);
 
-            ArrayList<Creature> livingList = maps.getLives();
-            for(Creature c: livingList){
-                if(c!=null){
-                    exec.execute(c);
+                ArrayList<Creature> livingList = maps.getLives();
+                for(Creature c: livingList){
+                    if(c!=null){
+                        exec.execute(c);
+                    }
                 }
+                exec.shutdown();
             }
-            exec.shutdown();
         }
 
     }
@@ -175,7 +179,6 @@ public class BattleFieldController implements Config{
         initCanvas();
         maps.showMaps();
     }
-
     public void formation2(ActionEvent actionEvent) {
         initFormation = 1;
         initFormationText.setText("长蛇 vs 鱼鳞");
@@ -184,7 +187,6 @@ public class BattleFieldController implements Config{
         initCanvas();
         maps.showMaps();
     }
-
     public void formation3(ActionEvent actionEvent) {
         initFormation = 2;
         initFormationText.setText("衝轭 vs 鱼鳞");
@@ -193,7 +195,6 @@ public class BattleFieldController implements Config{
         initCanvas();
         maps.showMaps();
     }
-
     public void formation4(ActionEvent actionEvent) {
         initFormation = 3;
         initFormationText.setText("鹤翼 vs 锋矢");
@@ -202,7 +203,6 @@ public class BattleFieldController implements Config{
         initCanvas();
         maps.showMaps();
     }
-
     public void formation5(ActionEvent actionEvent) {
         initFormation = 4;
         initFormationText.setText("雁行 vs 方円");
@@ -224,8 +224,24 @@ public class BattleFieldController implements Config{
 
     //读取文件复盘
     public void getGameRecord(ActionEvent actionEvent) {
+
+        if(!initCanvasFlag){
+            initCanvas();
+            ExecutorService exec = Executors.newCachedThreadPool();
+            exec.execute(player);
+            exec.shutdown();
+        }
+
         System.out.println("读取复盘");
         RecorderSystem rs = new RecorderSystem(mainPaneWindow.getScene().getWindow());
         ArrayList<Recorder> gameRecords = rs.openRecord();
+        player.setRunning(false);
+//        while (player.getRunning()){
+//            GUITimer.displaySleep(50);
+//        }
+        player.setReplaying(true);
+        System.out.println("replay");
+        player.setRecorder(gameRecords);
+
     }
 }
