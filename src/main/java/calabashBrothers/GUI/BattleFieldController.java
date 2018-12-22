@@ -98,6 +98,13 @@ public class BattleFieldController implements Config{
         Creature.setMaps(maps);
         player.setWindow(mainPaneWindow.getScene().getWindow());
     }
+    //设置阵型时初始化
+    private void initCanvasFormation(){
+        //对Creature的画布和Maps里的Canvas初始化（类的静态变量，直接设置）
+        Maps.setBattleFiledCanvas(mainCanvas);
+        Creature.setMaps(maps);
+        player.setWindow(mainPaneWindow.getScene().getWindow());
+    }
 
     //初始阵型
     private void Round1(){
@@ -171,47 +178,6 @@ public class BattleFieldController implements Config{
 
     }
 
-    public void formation1(ActionEvent actionEvent) {
-        initFormation = 0;
-        initFormationText.setText("长蛇 vs 偃月");
-        maps.removeMaps();
-        setInitFormations(0);
-        initCanvas();
-        maps.showMaps();
-    }
-    public void formation2(ActionEvent actionEvent) {
-        initFormation = 1;
-        initFormationText.setText("长蛇 vs 鱼鳞");
-        maps.removeMaps();
-        setInitFormations(1);
-        initCanvas();
-        maps.showMaps();
-    }
-    public void formation3(ActionEvent actionEvent) {
-        initFormation = 2;
-        initFormationText.setText("衝轭 vs 鱼鳞");
-        maps.removeMaps();
-        setInitFormations(2);
-        initCanvas();
-        maps.showMaps();
-    }
-    public void formation4(ActionEvent actionEvent) {
-        initFormation = 3;
-        initFormationText.setText("鹤翼 vs 锋矢");
-        maps.removeMaps();
-        setInitFormations(3);
-        initCanvas();
-        maps.showMaps();
-    }
-    public void formation5(ActionEvent actionEvent) {
-        initFormation = 4;
-        initFormationText.setText("雁行 vs 方円");
-        maps.removeMaps();
-        setInitFormations(4);
-        initCanvas();
-        maps.showMaps();
-    }
-
     //主动复盘
     public void gameReplay(ActionEvent actionEvent) {
         synchronized (player){
@@ -243,5 +209,47 @@ public class BattleFieldController implements Config{
         System.out.println("replay");
         player.setRecorder(gameRecords);
 
+    }
+
+    //设置初始阵型
+    public void formation1(ActionEvent actionEvent) {
+        initFormation = 0;
+        initFormationText.setText("长蛇 vs 偃月");
+        maps.removeMaps();
+        setInitFormations(0);
+        initCanvasFormation();
+        maps.showMaps();
+    }
+    public void formation2(ActionEvent actionEvent) {
+        initFormation = 1;
+        initFormationText.setText("长蛇 vs 鱼鳞");
+        maps.removeMaps();
+        setInitFormations(1);
+        initCanvasFormation();
+        maps.showMaps();
+    }
+    public void formation3(ActionEvent actionEvent) {
+        initFormation = 2;
+        initFormationText.setText("衝轭 vs 鱼鳞");
+        maps.removeMaps();
+        setInitFormations(2);
+        initCanvasFormation();
+        maps.showMaps();
+    }
+    public void formation4(ActionEvent actionEvent) {
+        initFormation = 3;
+        initFormationText.setText("鹤翼 vs 锋矢");
+        maps.removeMaps();
+        setInitFormations(3);
+        initCanvasFormation();
+        maps.showMaps();
+    }
+    public void formation5(ActionEvent actionEvent) {
+        initFormation = 4;
+        initFormationText.setText("雁行 vs 方円");
+        maps.removeMaps();
+        setInitFormations(4);
+        initCanvasFormation();
+        maps.showMaps();
     }
 }

@@ -51,7 +51,7 @@ public class RecorderSystem {
 //        System.out.println(recorders);
 //        File file = fileChooser1.showSaveDialog(window);
 //        System.out.println(file);
-        File file = new File("H:\\JavaFinalPrepare\\calabashBoys\\src\\main\\resources\\record\\record.huluwa");
+        File file = new File("record.huluwa");
 
         try{
             //将记录序列化输出
