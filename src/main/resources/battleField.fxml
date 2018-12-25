@@ -16,7 +16,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<BorderPane fx:id="mainPaneWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="/battleField.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calabashBrothers.GUI.BattleFieldController">
+<BorderPane fx:id="mainPaneWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#OnKeyPressEvents" prefHeight="800.0" prefWidth="1200.0" stylesheets="/battleField.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calabashBrothers.GUI.BattleFieldController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>

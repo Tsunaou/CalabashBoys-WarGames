@@ -34,15 +34,6 @@ public class BattleFieldController implements Config{
     private int initFormation;     //初始对阵
     private boolean fighting;
 
-    //可以写一个阵型工厂类
-    ChangShe cs = new ChangShe(4,3);//长蛇阵 葫芦娃阵法
-    ChongE ce = new ChongE(4,3);    //衝轭阵 葫芦娃阵法
-    HeYi hy= new HeYi(7,4);         //鹤翼阵 葫芦娃阵法
-    YanXing yx = new YanXing(4,6);  //雁行阵 葫芦娃阵法
-    FangYuan fy =new FangYuan(7,7); //方圆阵 妖怪阵法
-    FengShi fs= new FengShi(7,7);   //锋矢阵 妖怪阵法
-    YuLin yl= new YuLin(7,7);       //鱼鳞阵 妖怪阵法
-    YanYue yy= new YanYue(7,7);     //偃月阵 妖怪阵法
 
     //生物类
     ArrayList<Creature> boys;    //7个葫芦娃
@@ -111,36 +102,36 @@ public class BattleFieldController implements Config{
     //初始阵型
     private void Round1(){
         //Round 1： 长蛇 vs 偃月
-        cs.SetFormation(maps,boys,0);
-        yy.SetFormation(maps,mons,0);
+        FormationFactory.createChangShe(4,3).SetFormation(maps,boys,0);
+        FormationFactory.createYanYue(7,7).SetFormation(maps,mons,0);
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
     private void Round2(){
         //Round 2： 长蛇 vs 鱼鳞
-        cs.SetFormation(maps,boys,0);
-        yl.SetFormation(maps,mons,0);
+        FormationFactory.createChangShe(4,3).SetFormation(maps,boys,0);
+        FormationFactory.createYuLin(7,7).SetFormation(maps,mons,0);
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
     private void Round3(){
         //Round 3： 衝轭 vs 鱼鳞
-        ce.SetFormation(maps,boys,0);
-        yl.SetFormation(maps,mons,0);
+        FormationFactory.createChongE(4,3).SetFormation(maps,boys,0);
+        FormationFactory.createYuLin(7,7).SetFormation(maps,mons,0);
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
     private void Round4(){
         //Round 4： 鹤翼 vs 锋矢
-        hy.SetFormation(maps,boys,0);
-        fs.SetFormation(maps,mons,0);
+        FormationFactory.createHeYi(7,4).SetFormation(maps,boys,0);
+        FormationFactory.createFengShi(7,7).SetFormation(maps,mons,0);
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,13);
     }
     private void Round5(){
         //Round 5： 雁行 vs 方円
-        yx.SetFormation(maps,boys,0);
-        fy.SetFormation(maps,mons,0);
+        FormationFactory.createYanXing(4,6).SetFormation(maps,boys,0);
+        FormationFactory.createFangYuan(7,7).SetFormation(maps,mons,0);
         gp.CheeringUp(maps,7,1);
         sk.CheeringUp(maps,7,10);
     }
@@ -214,17 +205,7 @@ public class BattleFieldController implements Config{
 
     }
 
-//    //响应键盘事件
-//    public void handle(KeyEvent event) {
-//        if(event.getCode() == KeyCode.SPACE){
-//            this.gameStart(new ActionEvent());
-//            System.out.println("Press Space");
-//        }
-//        if(event.getCode() == KeyCode.L){
-//            this.getGameRecord(new ActionEvent());
-//            System.out.println("Press L");
-//        }
-//    }
+
 
     //设置初始阵型
     public void formation1(ActionEvent actionEvent) {
@@ -267,4 +248,19 @@ public class BattleFieldController implements Config{
         initCanvasFormation();
         maps.showMaps();
     }
+
+    //响应键盘事件
+    public void OnKeyPressEvents(KeyEvent keyEvent) {
+        //按下空格开始
+        if(keyEvent.getCode() == KeyCode.SPACE){
+            this.gameStart(new ActionEvent());
+            System.out.println("Press Space");
+        }
+        //按下L读取
+        if(keyEvent.getCode() == KeyCode.L){
+            this.getGameRecord(new ActionEvent());
+            System.out.println("Press L");
+        }
+    }
+
 }
