@@ -8,5 +8,4 @@ import calabashBrothers.GUI.Maps;
  */
 public interface Fighting {
     void Fighting(int x,int y);
-
 }

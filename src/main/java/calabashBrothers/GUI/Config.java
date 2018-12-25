@@ -30,7 +30,7 @@ public interface Config {
 
     //生命值
     final int HP_Creature = 100;
-    final int HP_Calabash = 200;
+    final int HP_Calabash = 250;
     final int HP_Grandpa = 100;
     final int HP_Monster = 150;
     final int HP_Scorpion = 300;
@@ -41,7 +41,7 @@ public interface Config {
     final int Scale_Calabash = 1;
     final int Scale_Grandpa = 1;
     final int Scale_Monster = 1;
-    final int Scale_Scorpion = 3;
+    final int Scale_Scorpion = 2;
     final int Scale_Snake = 1;
 
 }

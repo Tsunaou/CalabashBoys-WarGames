@@ -1,4 +1,4 @@
-package calabashBrothers.factory;
+package calabashBrothers.formation;
 import calabashBrothers.formation.*;
 /**
  * @ Author     ：Young

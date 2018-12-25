@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
@@ -178,13 +180,14 @@ public class BattleFieldController implements Config{
 
     }
 
-    //主动复盘
+    //主动复盘（迭代一先删了）
     public void gameReplay(ActionEvent actionEvent) {
-        synchronized (player){
-            player.setRunning(false);
-            player.setReplaying(true);
-            System.out.println("replay");
-        }
+
+//        synchronized (player){
+//            player.setRunning(false);
+//            player.setReplaying(true);
+//            System.out.println("replay");
+//        }
 
     }
 
@@ -210,6 +213,18 @@ public class BattleFieldController implements Config{
         player.setRecorder(gameRecords);
 
     }
+
+//    //响应键盘事件
+//    public void handle(KeyEvent event) {
+//        if(event.getCode() == KeyCode.SPACE){
+//            this.gameStart(new ActionEvent());
+//            System.out.println("Press Space");
+//        }
+//        if(event.getCode() == KeyCode.L){
+//            this.getGameRecord(new ActionEvent());
+//            System.out.println("Press L");
+//        }
+//    }
 
     //设置初始阵型
     public void formation1(ActionEvent actionEvent) {
