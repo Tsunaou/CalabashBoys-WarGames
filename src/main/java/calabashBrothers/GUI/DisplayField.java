@@ -1,14 +1,15 @@
 package calabashBrothers.GUI;
 
 import calabashBrothers.GUI.Record.Recorder;
-import calabashBrothers.GUI.Record.RecorderSystem;
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
+import javafx.scene.control.Label;
 import javafx.stage.Window;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**

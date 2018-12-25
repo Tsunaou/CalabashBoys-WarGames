@@ -65,7 +65,7 @@
                                 <Font name="System Italic" size="20.0" />
                             </font>
                         </Label>
-                        <Label id="TimeText" prefHeight="20.0" prefWidth="100.0" text="Time" GridPane.columnIndex="1" />
+                        <Label id="TimeText" fx:id="TimerLabel" prefHeight="20.0" prefWidth="100.0" text="0:00" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
                 <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
@@ -97,7 +97,7 @@
                         <Insets bottom="5.0" top="10.0" />
                     </VBox.margin>
                 </Label>
-                <Slider id="SpeedChoiceText" showTickLabels="true" showTickMarks="true" value="50.0">
+                <Slider id="SpeedChoiceText" fx:id="SpeedSlider" showTickLabels="true" showTickMarks="true" value="50.0">
                     <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />
                     </VBox.margin>

@@ -10,11 +10,15 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -53,9 +57,12 @@ public class BattleFieldController implements Config{
     private Button startBotton;     //开始的按钮
     @FXML
     public Label initFormationText;//展示初始阵型的信息
-
     @FXML
     private BorderPane mainPaneWindow;
+    @FXML
+    public Label TimerLabel;
+    @FXML
+    public Slider SpeedSlider;
 
     public BattleFieldController() {
         initCreatures();
@@ -165,10 +172,10 @@ public class BattleFieldController implements Config{
                         exec.execute(c);
                     }
                 }
+
                 exec.shutdown();
             }
         }
-
     }
 
     //主动复盘（迭代一先删了）
@@ -204,8 +211,6 @@ public class BattleFieldController implements Config{
         player.setRecorder(gameRecords);
 
     }
-
-
 
     //设置初始阵型
     public void formation1(ActionEvent actionEvent) {
@@ -263,4 +268,8 @@ public class BattleFieldController implements Config{
         }
     }
 
+    public void SpeedDragDone(DragEvent dragEvent) {
+        System.out.println(SpeedSlider.getValue());
+        this.TimerLabel.setText(String.valueOf(SpeedSlider.getValue()));
+    }
 }
