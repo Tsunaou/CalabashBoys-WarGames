@@ -97,7 +97,7 @@
                         <Insets bottom="5.0" top="10.0" />
                     </VBox.margin>
                 </Label>
-                <Slider id="SpeedChoiceText" fx:id="SpeedSlider" showTickLabels="true" showTickMarks="true" value="50.0">
+                <Slider id="SpeedChoiceText" fx:id="SpeedSlider" onMouseReleased="#dragSpeed" showTickLabels="true" showTickMarks="true" value="50.0">
                     <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />
                     </VBox.margin>

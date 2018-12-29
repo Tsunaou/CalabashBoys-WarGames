@@ -15,6 +15,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
@@ -328,11 +329,10 @@ public class BattleFieldController implements Config{
         }
     }
 
-    public void SpeedDragDone(DragEvent dragEvent) {
-        System.out.println(SpeedSlider.getValue());
-        this.TimerLabel.setText(String.valueOf(SpeedSlider.getValue()));
+    public void dragSpeed(MouseEvent mouseEvent) {
+        System.out.println("Speed");
+        double newFlashSpeed = 1000*(1-SpeedSlider.getValue()/SpeedSlider.getMax());
+        System.out.println(newFlashSpeed);
+        DisplayField.setDisplayHz(new Double(newFlashSpeed).intValue());
     }
-
-
-
 }

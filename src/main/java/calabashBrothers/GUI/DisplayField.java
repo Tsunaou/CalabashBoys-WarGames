@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class DisplayField implements Runnable, Callable<String> {
 
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
-    private int DISPLAY_HZ = 500;       //刷新频率
+    private static int DISPLAY_HZ = 500;       //刷新频率
     private boolean Running = true;
     private boolean Replaying = false;
     private boolean firstDisplay = true;
@@ -52,6 +52,10 @@ public class DisplayField implements Runnable, Callable<String> {
 
     public boolean getRunning() {
         return Running;
+    }
+
+    public static void setDisplayHz(int displayHz) {
+        DISPLAY_HZ = displayHz;
     }
 
     public void setRunning(boolean running) {

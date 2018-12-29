@@ -14,7 +14,7 @@ public interface Config {
 
     //攻击力
     final int ATK_Creature = 5;
-    final int ATK_Calabash = 80;
+    final int ATK_Calabash = 8;
     final int ATK_Grandpa = 2;
     final int ATK_Monster = 6;
     final int ATK_Scorpion = 8;
@@ -38,7 +38,7 @@ public interface Config {
 
     //攻击范围
     final int Scale_Creature = 1;
-    final int Scale_Calabash = 5;
+    final int Scale_Calabash = 1;
     final int Scale_Grandpa = 1;
     final int Scale_Monster = 1;
     final int Scale_Scorpion = 2;
