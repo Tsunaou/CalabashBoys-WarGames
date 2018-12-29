@@ -51,23 +51,28 @@
     <left>
         <VBox prefHeight="722.0" prefWidth="194.0" BorderPane.alignment="CENTER">
             <children>
-                <GridPane prefHeight="49.0" prefWidth="194.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
+            <Pane id="TimePane" prefHeight="53.0" prefWidth="194.0">
+               <children>
+                      <GridPane prefHeight="49.0" prefWidth="194.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <Label id="Time" prefHeight="20.0" prefWidth="89.0" text="时间：">
-                            <font>
-                                <Font name="System Italic" size="20.0" />
-                            </font>
-                        </Label>
-                        <Label id="TimeText" fx:id="TimerLabel" prefHeight="20.0" prefWidth="100.0" text="0:00" GridPane.columnIndex="1" />
-                    </children>
-                </GridPane>
+                          </rowConstraints>
+                          <children>
+                              <Label id="Time" prefHeight="20.0" prefWidth="89.0" text="时间：" GridPane.rowIndex="1">
+                                  <font>
+                                      <Font name="System Italic" size="20.0" />
+                                  </font>
+                              </Label>
+                              <Label id="TimeText" fx:id="TimerLabel" prefHeight="20.0" prefWidth="100.0" text="0:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                          </children>
+                      </GridPane>
+               </children>
+            </Pane>
                 <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
                     <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />
@@ -92,7 +97,7 @@
                         <Font name="System Italic" size="20.0" />
                     </font>
                 </Label>
-                <Label id="SpeedChoice" text="速度选择">
+                <Label id="SpeedChoice" text="刷新速度选择">
                     <VBox.margin>
                         <Insets bottom="5.0" top="10.0" />
                     </VBox.margin>
@@ -102,6 +107,22 @@
                         <Insets bottom="10.0" top="5.0" />
                     </VBox.margin>
                 </Slider>
+            <Label id="SpeedChoice" text="战斗速度选择">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Slider id="SpeedChoiceText" fx:id="SpeedCreatureSlider" onMouseReleased="#dragCreatureSpeed" showTickLabels="true" showTickMarks="true" value="50.0">
+               <opaqueInsets>
+                  <Insets bottom="100.0" top="50.0" />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="5.0" />
+               </VBox.margin>
+            </Slider>
             </children>
             <BorderPane.margin>
                 <Insets bottom="30.0" left="10.0" top="15.0" />

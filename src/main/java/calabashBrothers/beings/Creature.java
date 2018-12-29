@@ -36,6 +36,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
     //线程相关
     private boolean Living;    //是否存活
     public static Maps maps;   //static变量，所有的生物共享一个maps
+    public static int sleepHZ = 1000;
 
     public Creature(String name) {
         super(name);
@@ -166,7 +167,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
                 }
                 moveRandom();
             }
-            GUITimer.displaySleep(1000);
+            GUITimer.displaySleep(sleepHZ);
         }
     }
 
@@ -196,6 +197,10 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
 
     public void setLiving(boolean living) {
         Living = living;
+    }
+
+    public static void setSleepHZ(int sleepHZ) {
+        Creature.sleepHZ = sleepHZ;
     }
 
     public Camp getCamp() {

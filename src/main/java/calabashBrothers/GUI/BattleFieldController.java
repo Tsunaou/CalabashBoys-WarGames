@@ -67,6 +67,7 @@ public class BattleFieldController implements Config{
     public Label TimerLabel;        //计时标签
     @FXML
     public Slider SpeedSlider;      //速度选择器
+    public Slider SpeedCreatureSlider;
 
     //构造函数
     public BattleFieldController() {
@@ -104,6 +105,7 @@ public class BattleFieldController implements Config{
         Maps.setBattleFiledCanvas(mainCanvas);
         Creature.setMaps(maps);
         player.setWindow(mainPaneWindow.getScene().getWindow());
+        GUITimer.setTimeLabel(TimerLabel);
     }
     //设置阵型时初始化
     private void initCanvasFormation(){
@@ -329,10 +331,19 @@ public class BattleFieldController implements Config{
         }
     }
 
+    //刷新速度选择
     public void dragSpeed(MouseEvent mouseEvent) {
-        System.out.println("Speed");
-        double newFlashSpeed = 1000*(1-SpeedSlider.getValue()/SpeedSlider.getMax());
+        System.out.print("刷新速度选择");
+        double newFlashSpeed = 200+800*(1-SpeedSlider.getValue()/SpeedSlider.getMax());
         System.out.println(newFlashSpeed);
         DisplayField.setDisplayHz(new Double(newFlashSpeed).intValue());
+    }
+
+    //生物速度选择
+    public void dragCreatureSpeed(MouseEvent mouseEvent) {
+        System.out.print("生物速度选择");
+        double newFlashSpeed = 400+1600*(1-SpeedCreatureSlider.getValue()/SpeedCreatureSlider.getMax());
+        System.out.println(newFlashSpeed);
+        Creature.setSleepHZ(new Double(newFlashSpeed).intValue());
     }
 }
