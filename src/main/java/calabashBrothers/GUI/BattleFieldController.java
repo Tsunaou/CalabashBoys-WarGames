@@ -211,6 +211,7 @@ public class BattleFieldController implements Config{
                     }
                 }
                 player = new DisplayField();
+                player.setMaps(maps);
                 exec.execute(player);
 
 
