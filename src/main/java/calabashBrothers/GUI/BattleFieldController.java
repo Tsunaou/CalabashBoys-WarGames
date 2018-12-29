@@ -4,6 +4,7 @@ import calabashBrothers.GUI.Record.Recorder;
 import calabashBrothers.GUI.Record.RecorderSystem;
 import calabashBrothers.beings.*;
 
+import calabashBrothers.beings.enums.Direction;
 import calabashBrothers.formation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,7 +65,7 @@ public class BattleFieldController implements Config{
     @FXML
     private BorderPane mainPaneWindow;
     @FXML
-    public Label TimerLabel;        //计时标签
+    public Label StateLabel;        //模式选择器
     @FXML
     public Slider SpeedSlider;      //速度选择器
     public Slider SpeedCreatureSlider;
@@ -105,7 +106,6 @@ public class BattleFieldController implements Config{
         Maps.setBattleFiledCanvas(mainCanvas);
         Creature.setMaps(maps);
         player.setWindow(mainPaneWindow.getScene().getWindow());
-        GUITimer.setTimeLabel(TimerLabel);
     }
     //设置阵型时初始化
     private void initCanvasFormation(){
@@ -169,6 +169,7 @@ public class BattleFieldController implements Config{
     public void gameStart(ActionEvent actionEvent) {
 
         if(!gameStarted){
+            StateLabel.setText("当前模式：战斗");
             startBotton.setText("重新开始");
             gameStarted = true;
             if(!canvasInitialized){
@@ -202,7 +203,14 @@ public class BattleFieldController implements Config{
                 maps = new Maps<Creature>(Height,Width);
                 initCreatures();
 
-                formation1(new ActionEvent());
+                switch (initFormation){
+                    case 0:formation1(new ActionEvent());break;
+                    case 1:formation2(new ActionEvent());break;
+                    case 2:formation3(new ActionEvent());break;
+                    case 3:formation4(new ActionEvent());break;
+                    case 4:formation5(new ActionEvent());break;
+                }
+
                 synchronized (player){
                     player.setDisPlaying(false);
                 }
@@ -226,6 +234,7 @@ public class BattleFieldController implements Config{
     public void gamePause(ActionEvent actionEvent) {
         if(gameStarted){
             if(!gamePause){
+                StateLabel.setText("当前模式：暂停");
                 System.out.println("暂停游戏");
                 synchronized (maps){
                     maps.resetMaps();
@@ -233,6 +242,7 @@ public class BattleFieldController implements Config{
                 gamePause = true;
             }else{
                 //重新激活线程
+                StateLabel.setText("当前模式：战斗");
                 ArrayList<Creature> livingList = maps.getLives();
                 for(Creature c: livingList){
                     if(c!=null){
@@ -244,7 +254,6 @@ public class BattleFieldController implements Config{
             }
         }
     }
-    
     //读取文件复盘
     public void getGameRecord(ActionEvent actionEvent) {
 
@@ -264,8 +273,12 @@ public class BattleFieldController implements Config{
             }
         }
 
+        StateLabel.setText("当前模式：回放");
         System.out.println("读取复盘");
         RecorderSystem rs = new RecorderSystem(mainPaneWindow.getScene().getWindow());
+        if(rs==null){
+            return;
+        }
         ArrayList<Recorder> gameRecords = rs.openRecord();
         player.setRunning(false);
         player.setReplaying(true);
@@ -329,6 +342,25 @@ public class BattleFieldController implements Config{
             this.getGameRecord(new ActionEvent());
             System.out.println("Press L");
         }
+
+        //操作方向
+        if(keyEvent.getCode() == KeyCode.UP){
+            System.out.println("Press UP");
+            gp.addOptions(Direction.LEFT);
+        }
+        if(keyEvent.getCode() == KeyCode.DOWN){
+            System.out.println("Press DOWN");
+            gp.addOptions(Direction.RIGHT);
+        }
+        if(keyEvent.getCode() == KeyCode.LEFT){
+            System.out.println("Press LEFT");
+            gp.addOptions(Direction.UP);
+        }
+        if(keyEvent.getCode() == KeyCode.RIGHT){
+            System.out.println("Press RIGHT");
+            gp.addOptions(Direction.DOWN);
+        }
+
     }
 
     //刷新速度选择

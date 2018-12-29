@@ -13,12 +13,12 @@ public interface Config {
     final int DAMAGE_PER = 15;
 
     //攻击力
-    final int ATK_Creature = 5;
-    final int ATK_Calabash = 8;
-    final int ATK_Grandpa = 2;
-    final int ATK_Monster = 6;
-    final int ATK_Scorpion = 8;
-    final int ATK_Snake = 10;
+    final int ATK_Creature = 8;
+    final int ATK_Calabash = 10;
+    final int ATK_Grandpa = 6;
+    final int ATK_Monster = 8;
+    final int ATK_Scorpion = 12;
+    final int ATK_Snake = 9;
 
     //防御力
     final int DEF_Creature = 5;
@@ -43,5 +43,9 @@ public interface Config {
     final int Scale_Monster = 1;
     final int Scale_Scorpion = 2;
     final int Scale_Snake = 1;
+
+    //回复效果
+    final int HP_ADD_JUSTICE = 20;
+    final int HP_ADD_MONSTER = 10;
 
 }

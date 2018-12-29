@@ -2,6 +2,7 @@ package calabashBrothers.GUI;
 
 import calabashBrothers.GUI.Record.*;
 import calabashBrothers.beings.Creature;
+import calabashBrothers.beings.Curable;
 import calabashBrothers.beings.enums.Camp;
 import calabashBrothers.beings.enums.Direction;
 import javafx.scene.canvas.Canvas;
@@ -217,6 +218,13 @@ public class Maps<T extends Creature> implements Config{
 
                     //保存生物信息
                     recorder.addObjList(new ObjectRecord(tmp.toString(),tmp.getHP_Remain(),tmp.getLocation()));
+                    //画治愈的能力
+                    if(tmp instanceof Curable){
+                        gc.setFill(Color.rgb(0,255,0,0.1));
+                        double x1=((j-1)>0?j-1:0)*UnitSize;
+                        double y1=((i-1)>0?i-1:0)*UnitSize;
+                        gc.fillRect(x1,y1,3*UnitSize,3*UnitSize);
+                    }
                     //画生物图片
                     gc.drawImage(tmp.getImage(),j*UnitSize,i*UnitSize,UnitSize,UnitSize);
                     //画血量条
@@ -227,6 +235,7 @@ public class Maps<T extends Creature> implements Config{
                         gc.setStroke(Color.CHARTREUSE);
                         gc.strokeLine(j*UnitSize, i*UnitSize, (j+tmp.getHP_Remain()/tmp.getHP_All())*UnitSize, i*UnitSize);
                     }
+
 
                     //一些额外处理
                     if(!startFlag){
@@ -410,10 +419,10 @@ public class Maps<T extends Creature> implements Config{
                 }
             }
         }
-        String winPath =this.getClass().getClassLoader().getResource("pic/JustiveWinner.jpg").toString();
+        String winnerImagePath =this.getClass().getClassLoader().getResource("pic/JustiveWinner.png").toString();
         if(winner == Camp.EVIL)
-            winPath=this.getClass().getClassLoader().getResource("pic/EvilWinner.jpg").toString();
-        gc.drawImage(new Image(winPath),0,0,canvasWidth,canvasHeight);
+            winnerImagePath=this.getClass().getClassLoader().getResource("pic/EvilWinner.png").toString();
+        gc.drawImage(new Image(winnerImagePath),0,0,canvasWidth,canvasHeight);
         RecorderSystem rs = new RecorderSystem(window);
         rs.saveRecord(recordList);
     }

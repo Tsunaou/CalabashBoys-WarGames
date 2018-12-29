@@ -28,7 +28,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
     private double ATK;      //攻击力
     private double DEF;     //防御力
     private int atkScale;       //攻击范围
-    private Camp camp;          //阵营，防止自相残杀
+    protected Camp camp;          //阵营，防止自相残杀
 
     //攻击图片
     Image imageAtk;

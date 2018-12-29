@@ -14,8 +14,6 @@ import java.util.concurrent.TimeUnit;
  * @Version: $version$
  */
 public class GUITimer {
-    private static Label timeLabel;
-    private static int initTimes = 0;
     public static void displaySleep(int ms){
         try{
             TimeUnit.MILLISECONDS.sleep(ms);
@@ -24,9 +22,4 @@ public class GUITimer {
         }
     }
 
-    @Deprecated
-    public static void setTimeLabel(Label timeLabel) {
-        GUITimer.timeLabel = timeLabel;
-        timeLabel.setText(String.valueOf(initTimes));
-    }
 }

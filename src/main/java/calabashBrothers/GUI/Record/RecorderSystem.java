@@ -26,6 +26,7 @@ public class RecorderSystem {
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(window);
         System.out.println(file);
+        //没有选择要读取的文件
 
         ArrayList<Recorder> recorders = new ArrayList<>();
 

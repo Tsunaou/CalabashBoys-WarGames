@@ -51,28 +51,14 @@
     <left>
         <VBox prefHeight="722.0" prefWidth="194.0" BorderPane.alignment="CENTER">
             <children>
-            <Pane id="TimePane" prefHeight="53.0" prefWidth="194.0">
-               <children>
-                      <GridPane prefHeight="49.0" prefWidth="194.0">
-                          <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                              <RowConstraints />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                          <children>
-                              <Label id="Time" prefHeight="20.0" prefWidth="89.0" text="时间：" GridPane.rowIndex="1">
-                                  <font>
-                                      <Font name="System Italic" size="20.0" />
-                                  </font>
-                              </Label>
-                              <Label id="TimeText" fx:id="TimerLabel" prefHeight="20.0" prefWidth="100.0" text="0:00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                          </children>
-                      </GridPane>
-               </children>
-            </Pane>
+                  <Label id="TimeText" fx:id="StateLabel" prefHeight="27.0" prefWidth="144.0" text="当前模式：初始">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" top="5.0" />
+               </VBox.margin>
+            </Label>
                 <Button fx:id="startBotton" mnemonicParsing="false" onAction="#gameStart" prefHeight="30.0" prefWidth="203.0" text="开始">
                     <VBox.margin>
                         <Insets bottom="10.0" top="5.0" />

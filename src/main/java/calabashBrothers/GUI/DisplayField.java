@@ -128,6 +128,21 @@ public class DisplayField implements Runnable, Callable<String> {
                 break;
             }
         }
+        synchronized (maps){
+            int justiceCnts = maps.getJusticeCounts();
+            int evilCnts = maps.getEvilCounts();
+            //妖怪获胜
+            if(justiceCnts==0 && evilCnts!=0){
+                maps.gameOver(Camp.EVIL,window);
+                changeMusic("media/lose.mp3",false);
+            }
+            //葫芦娃获胜
+            if(evilCnts==0 && justiceCnts!=0){
+                maps.gameOver(Camp.JUSTICE,window);
+                changeMusic("media/win.mp3",false);
+            }
+        }
+
         Replaying = false;
         System.out.println("Replaying Ending");
     }
