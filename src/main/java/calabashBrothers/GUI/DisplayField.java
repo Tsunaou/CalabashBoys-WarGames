@@ -111,7 +111,6 @@ public class DisplayField implements Runnable{
         System.out.println("Replaying Ending");
     }
 
-
     private void display(){
         boolean dangerFlag = false;
         while (Running){
