@@ -8,6 +8,7 @@ import calabashBrothers.formation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -16,9 +17,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,7 +36,7 @@ public class BattleFieldController implements Config{
     private double UnitSize;       //单位宽度
 
     private int initFormation;     //初始对阵
-    private boolean fighting;
+    private boolean gameStarted;
 
 
     //生物类
@@ -46,10 +46,13 @@ public class BattleFieldController implements Config{
     Snake sk;                    //蛇精
     Scorpion sp;                 //蝎子精
 
+    //线程池
+    ExecutorService exec;
+    boolean gamePause;
     //展示类
     DisplayField player;
     //控制行为
-    boolean initCanvasFlag = false;//是否被初始化
+    boolean canvasInitialized = false;//是否被初始化
 
     @FXML
     private Canvas mainCanvas;      //主画布
@@ -60,14 +63,17 @@ public class BattleFieldController implements Config{
     @FXML
     private BorderPane mainPaneWindow;
     @FXML
-    public Label TimerLabel;
+    public Label TimerLabel;        //计时标签
     @FXML
-    public Slider SpeedSlider;
+    public Slider SpeedSlider;      //速度选择器
 
+    //构造函数
     public BattleFieldController() {
         initCreatures();
         initFormation = 0;
-        fighting = false;
+        gameStarted = false;
+        gamePause = false;
+        exec = Executors.newCachedThreadPool();
         setInitFormations(initFormation);
         player = new DisplayField();
         player.setMaps(maps);
@@ -92,7 +98,7 @@ public class BattleFieldController implements Config{
     }
     //初始化画布信息
     private void initCanvas(){
-        initCanvasFlag = true;
+        canvasInitialized = true;
         //对Creature的画布和Maps里的Canvas初始化（类的静态变量，直接设置）
         Maps.setBattleFiledCanvas(mainCanvas);
         Creature.setMaps(maps);
@@ -159,11 +165,11 @@ public class BattleFieldController implements Config{
     //开始游戏
     public void gameStart(ActionEvent actionEvent) {
 
-        if(!fighting){
-            fighting = true;
-            if(!initCanvasFlag){
+        if(!gameStarted){
+            startBotton.setText("重新开始");
+            gameStarted = true;
+            if(!canvasInitialized){
                 initCanvas();
-                ExecutorService exec = Executors.newCachedThreadPool();
                 exec.execute(player);
 
                 ArrayList<Creature> livingList = maps.getLives();
@@ -173,42 +179,95 @@ public class BattleFieldController implements Config{
                     }
                 }
 
-                exec.shutdown();
+//                exec.shutdown();
+            }
+        }else{
+            if(player.isRunning() || player.isReplaying()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("温馨提示");
+                alert.setHeaderText(null);
+                alert.setContentText("游戏正在进行或正在回放中，请稍后继续");
+                alert.showAndWait();
+            }else{
+                //重新开始需要什么条件呢
+                //重置生物和maps的引用
+                synchronized (maps){
+                    maps.resetMaps();
+                    maps.removeMaps();
+                    maps.refreshMaps();
+                }
+                maps = new Maps<Creature>(Height,Width);
+                initCreatures();
+
+                formation1(new ActionEvent());
+                synchronized (player){
+                    player.setDisPlaying(false);
+                }
+
+                ArrayList<Creature> livingList = maps.getLives();
+                for(Creature c: livingList){
+                    if(c!=null){
+                        exec.execute(c);
+                    }
+                }
+                player = new DisplayField();
+                exec.execute(player);
+
+
+            }
+
+        }
+    }
+    //暂停/继续
+    public void gamePause(ActionEvent actionEvent) {
+        if(gameStarted){
+            if(!gamePause){
+                System.out.println("暂停游戏");
+                synchronized (maps){
+                    maps.resetMaps();
+                }
+                gamePause = true;
+            }else{
+                //重新激活线程
+                ArrayList<Creature> livingList = maps.getLives();
+                for(Creature c: livingList){
+                    if(c!=null){
+                        c.setLiving(true);
+                        exec.execute(c);
+                    }
+                }
+                gamePause = false;
             }
         }
     }
-
-    //主动复盘（迭代一先删了）
-    public void gameReplay(ActionEvent actionEvent) {
-
-//        synchronized (player){
-//            player.setRunning(false);
-//            player.setReplaying(true);
-//            System.out.println("replay");
-//        }
-
-    }
-
+    
     //读取文件复盘
     public void getGameRecord(ActionEvent actionEvent) {
 
-        if(!initCanvasFlag){
+        if(!canvasInitialized){
             initCanvas();
-            ExecutorService exec = Executors.newCachedThreadPool();
             exec.execute(player);
-            exec.shutdown();
+        }
+
+        synchronized (player){
+            if((player.isRunning()&&gameStarted) || player.isReplaying()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("温馨提示");
+                alert.setHeaderText(null);
+                alert.setContentText("游戏正在战斗中，请待游戏结束后读档回放");
+                alert.showAndWait();
+                return;
+            }
         }
 
         System.out.println("读取复盘");
         RecorderSystem rs = new RecorderSystem(mainPaneWindow.getScene().getWindow());
         ArrayList<Recorder> gameRecords = rs.openRecord();
         player.setRunning(false);
-//        while (player.getRunning()){
-//            GUITimer.displaySleep(50);
-//        }
         player.setReplaying(true);
         System.out.println("replay");
         player.setRecorder(gameRecords);
+        exec.submit((Callable<String>) player);
 
     }
 
@@ -272,4 +331,7 @@ public class BattleFieldController implements Config{
         System.out.println(SpeedSlider.getValue());
         this.TimerLabel.setText(String.valueOf(SpeedSlider.getValue()));
     }
+
+
+
 }

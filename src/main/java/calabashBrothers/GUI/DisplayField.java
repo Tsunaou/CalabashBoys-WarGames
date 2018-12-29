@@ -3,13 +3,12 @@ package calabashBrothers.GUI;
 import calabashBrothers.GUI.Record.Recorder;
 import calabashBrothers.beings.Creature;
 import calabashBrothers.beings.enums.Camp;
-import javafx.scene.control.Label;
 import javafx.stage.Window;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @ Date       ：Created in 18:58 2018/12/17
  * @ Description：实时刷新屏幕
  */
-public class DisplayField implements Runnable{
+public class DisplayField implements Runnable, Callable<String> {
 
     private static Maps<Creature> maps;   //static变量，所有的生物共享一个maps
     private int DISPLAY_HZ = 500;       //刷新频率
@@ -32,6 +31,7 @@ public class DisplayField implements Runnable{
 
     private Window window;  //窗口
     private boolean windowFlag = false;
+    private boolean disPlaying = true;
 
     public DisplayField(){
         s = this.getClass().getClassLoader().getResource("media/Shediao.mp3").toString();
@@ -64,6 +64,14 @@ public class DisplayField implements Runnable{
         System.out.println("2.Display setReplaying ture");
     }
 
+    public boolean isRunning() {
+        return Running;
+    }
+
+    public boolean isReplaying() {
+        return Replaying;
+    }
+
     public void setWindow(Window window) {
         this.window = window;
         windowFlag = true;
@@ -81,6 +89,14 @@ public class DisplayField implements Runnable{
         }
     }
 
+    public boolean isDisPlaying() {
+        return disPlaying;
+    }
+
+    public void setDisPlaying(boolean disPlaying) {
+        this.disPlaying = disPlaying;
+    }
+
     private void changeMusic(String url, boolean replay){
         player.stop();
         String s2 = this.getClass().getClassLoader().getResource(url).toString();
@@ -93,6 +109,7 @@ public class DisplayField implements Runnable{
         player.play();
     }
 
+    //回放记录文件
     public void replayRecordList( ArrayList<Recorder> r){
         changeMusic("media/Shediao.mp3",true);
         System.out.println("Replaying,size="+r.size());
@@ -111,11 +128,12 @@ public class DisplayField implements Runnable{
         System.out.println("Replaying Ending");
     }
 
+    //播放
     private void display(){
         boolean dangerFlag = false;
         while (Running){
+            System.out.println("display Running");
             synchronized (maps){
-//                maps.refreshMaps();
                 maps.showMaps();
                 if(firstDisplay){
                     displaySleep(3);
@@ -125,27 +143,29 @@ public class DisplayField implements Runnable{
             synchronized (maps){
                 int justiceCnts = maps.getJusticeCounts();
                 int evilCnts = maps.getEvilCounts();
+                //人数少于10人的时候，修改背景音乐
                 if((justiceCnts+evilCnts)<=10 && !dangerFlag){
                     changeMusic("media/luffy.mp3",true);
                     System.err.println("人数小于10人");
                     dangerFlag = true;
                 }
+                //妖怪获胜
                 if(justiceCnts==0 && evilCnts!=0){
                     maps.gameOver(Camp.EVIL,window);
                     changeMusic("media/lose.mp3",false);
                     this.Running = false;
                     fightingEnd = true;
-                    Replaying = true;
                 }
+                //葫芦娃获胜
                 if(evilCnts==0 && justiceCnts!=0){
                     maps.gameOver(Camp.JUSTICE,window);
                     changeMusic("media/win.mp3",false);
                     this.Running = false;
                     fightingEnd = true;
-                    Replaying = true;
                 }
                 if(fightingEnd){
-                    displaySleep(3000);
+                    displaySleep(5000);
+                    player.stop();
                 }
 
             }
@@ -153,36 +173,29 @@ public class DisplayField implements Runnable{
         }
     }
 
+    //回放
     void replay(){
-
-//        synchronized (maps){
-//            recorder = maps.getRecordList();
-//            System.out.println("getRecordList");
-//            if(!fightingEnd){
-//                maps.gameOver(Camp.JUSTICE,window);
-//            }
-//            player.stop();
-//        }
-
-
-//        Iterator<Recorder> it = recorder.iterator(); //由于迭代器的实现机制，会触发同时写异常
-
+        while (!Replaying){
+            displaySleep(500);
+            System.out.println("waiting for replay");
+        }
         if(Replaying){
             this.replayRecordList(recorder);
-        }
-    }
-
-    public void run(){
-        //不断监听外界行为
-        while(true){
             display();
-            //等待外界的回放信号
-            while (!Replaying){
-                displaySleep(500);
-            }
-            replay();
             Replaying = false;
         }
     }
+
+    //run方法
+    public void run(){
+        display();
+    }
+
+    public String call(){
+        //等待外界的回放信号
+        replay();
+        return "replay";
+    }
+
 
 }

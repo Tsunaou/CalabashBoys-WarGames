@@ -54,12 +54,5 @@ public class Beings {
         return location;
     }
 
-    public void beingSleep(int ms){
-        try{
-            TimeUnit.MILLISECONDS.sleep(ms);
-        }catch (InterruptedException e){
-            System.out.println(e.toString());
-        }
-    }
 }
 

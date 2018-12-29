@@ -73,7 +73,7 @@
                         <Insets bottom="10.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-            <Button fx:id="replayBotton" mnemonicParsing="false" onAction="#gameReplay" prefHeight="30.0" prefWidth="203.0" text="复盘">
+            <Button fx:id="pauseBotton" mnemonicParsing="false" onAction="#gamePause" prefHeight="30.0" prefWidth="203.0" text="暂停/继续">
                <VBox.margin>
                   <Insets bottom="10.0" top="5.0" />
                </VBox.margin></Button>

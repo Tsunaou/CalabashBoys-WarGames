@@ -422,4 +422,14 @@ public class Maps<T extends Creature> implements Config{
     public ArrayList<Recorder> getRecordList() {
         return recordList;
     }
+
+    //重设
+    public boolean resetMaps(){
+        synchronized (maps){
+            for(Creature c: this.getLives()){
+                c.setLiving(false);
+            }
+        }
+        return true;
+    }
 }

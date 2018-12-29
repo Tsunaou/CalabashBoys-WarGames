@@ -3,6 +3,7 @@ package calabashBrothers.beings;
 
 import calabashBrothers.GUI.Config;
 import calabashBrothers.GUI.Coordinate;
+import calabashBrothers.GUI.GUITimer;
 import calabashBrothers.GUI.Maps;
 import calabashBrothers.beings.enums.Camp;
 import calabashBrothers.beings.enums.Direction;
@@ -165,7 +166,7 @@ public class Creature extends Beings implements Runnable, Config ,Fighting{
                 }
                 moveRandom();
             }
-            beingSleep(1000);
+            GUITimer.displaySleep(1000);
         }
     }
 
