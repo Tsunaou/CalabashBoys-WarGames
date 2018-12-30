@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class GUITimer {
     public static void displaySleep(int ms){
-        try{
+        try {
             TimeUnit.MILLISECONDS.sleep(ms);
-        }catch (InterruptedException e){
-            System.out.println(e.toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

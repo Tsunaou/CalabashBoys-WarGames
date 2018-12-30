@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
  * @ Author     ：Young
  * @ Description：妖怪
  */
-public class Monster extends Creature implements Fighting{
+public class Monster extends Creature{
     public Monster() {
         super("小喽啰");
         this.filePath = this.getClass().getClassLoader().getResource("pic/lolo.jpg");

@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
  * @ Author     ：Young
  * @ Description：蝎子精
  */
-public class Scorpion extends Monster implements Fighting{
+public class Scorpion extends Monster{
     public Scorpion() {
         this.name="蝎子精";
         this.filePath = this.getClass().getClassLoader().getResource("pic/scorpion.jpg");

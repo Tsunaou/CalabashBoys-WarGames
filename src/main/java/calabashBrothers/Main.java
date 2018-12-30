@@ -17,7 +17,6 @@ import javafx.stage.WindowEvent;
 public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
-        //setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("battleField.fxml"));
         primaryStage.setTitle("葫芦娃vs妖精");
         primaryStage.setScene(new Scene(root, 1200.0D, 800.0D)); //设置初始的窗口大小

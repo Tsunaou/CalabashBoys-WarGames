@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
  * @ Description：有一种生物，名为葫芦娃
  */
 
-public class CalabashBoy extends Creature implements Fighting{
+public class CalabashBoy extends Creature{
     protected Color color;
     protected int rank;
 

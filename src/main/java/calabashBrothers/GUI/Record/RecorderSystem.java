@@ -5,6 +5,7 @@ import javafx.stage.Window;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @ Author     ：Young
@@ -40,7 +41,7 @@ public class RecorderSystem {
             recorders = (ArrayList<Recorder>)in.readObject();
             System.out.println(recorders);
         }catch (ClassNotFoundException | IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 
@@ -61,7 +62,7 @@ public class RecorderSystem {
             out.writeObject(recorders);
             out.close(); // Also flushes output
         }catch (IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 
