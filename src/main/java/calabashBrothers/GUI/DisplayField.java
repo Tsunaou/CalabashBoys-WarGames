@@ -101,6 +101,7 @@ public class DisplayField implements Runnable, Callable<String> {
         this.disPlaying = disPlaying;
     }
 
+    //切换音乐
     private void changeMusic(String url, boolean replay){
         player.stop();
         String s2 = this.getClass().getClassLoader().getResource(url).toString();
@@ -123,7 +124,7 @@ public class DisplayField implements Runnable, Callable<String> {
                 System.out.println("replayMaps,i="+i);
                 maps.replayMaps(r.get(i));
             }
-            displaySleep(DISPLAY_HZ);
+            GUITimer.displaySleep(DISPLAY_HZ);
             if(i>=r.size()){
                 break;
             }

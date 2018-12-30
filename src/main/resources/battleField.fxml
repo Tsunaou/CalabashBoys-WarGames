@@ -22,8 +22,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="文件">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="打开" />
-                        <MenuItem mnemonicParsing="false" text="保存" />
+                        <MenuItem mnemonicParsing="false" onAction="#getGameRecord" text="打开存档" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="阵型选择">
@@ -37,12 +36,12 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="帮助">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="使用说明" />
+                        <MenuItem mnemonicParsing="false" onAction="#showManual" text="使用说明" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="关于">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="关于本程序" />
+                        <MenuItem mnemonicParsing="false" onAction="#showAbout" text="关于本程序" />
                     </items>
                 </Menu>
             </menus>

@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -343,6 +344,11 @@ public class BattleFieldController implements Config{
             System.out.println("Press L");
         }
 
+        if(keyEvent.getCode() == KeyCode.P){
+            this.gamePause(new ActionEvent());
+            System.out.println("Press P");
+        }
+
         //操作方向
         if(keyEvent.getCode() == KeyCode.UP){
             System.out.println("Press UP");
@@ -377,5 +383,28 @@ public class BattleFieldController implements Config{
         double newFlashSpeed = 400+1600*(1-SpeedCreatureSlider.getValue()/SpeedCreatureSlider.getMax());
         System.out.println(newFlashSpeed);
         Creature.setSleepHZ(new Double(newFlashSpeed).intValue());
+    }
+
+    public void showManual(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("\n" +
+                "1.游戏开始前可以选择阵型，也可直接开始游戏。\n" +
+                "2.游戏进行过程中可以选择暂停和继续并通过左侧滚动条调整游戏速度和屏幕刷新频率。\n" +
+                "3.游戏结束后系统会自动存档。可以在游戏开始前或者结束后选择读档。\n" +
+                "3.开始游戏快捷键为“空格”；读档快捷键为“L”；暂停/继续快捷键为“P”。\n" +
+                "4.小彩蛋：战斗时可以试着用方向键控制爷爷的行动，有小惊喜哦。\n" +
+                "\n");
+        alert.showAndWait();
+    }
+
+    public void showAbout(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("关于本程序");
+        alert.setHeaderText(null);
+        alert.setContentText("葫芦娃大战妖精是一个简易小游戏，是南京大学计科《Java程序设计》课程的大作业。\n" +
+                "该程序使用Java8和Javafx的GUI框架开发，用Maven进行构建管理。游戏基于动画《葫芦娃》的故事，模拟了葫芦娃大战妖精的场景\n\n" +
+                "                              161220096 欧阳鸿荣\n");
+        alert.showAndWait();
     }
 }
