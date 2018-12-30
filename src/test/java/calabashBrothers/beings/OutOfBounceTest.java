@@ -34,7 +34,7 @@ public class OutOfBounceTest {
                 }
             }catch (OutBounceException e){
                 outsideCnts++;
-                System.out.println("坐标"+e.getOutPos().toString()+"越界,抛弃该位置");
+                System.out.print("At"+e.getOutPos().toString()+" out of bounce,but it has been caught and handled;");
             }
 
         }

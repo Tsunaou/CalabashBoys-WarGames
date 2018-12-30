@@ -290,7 +290,7 @@ public class Maps<T extends Creature> implements Config{
             for(int j=0;j<cols;j++){
                 synchronized (maps){
                     Creature tmp = maps.get(i).get(j).getContent();
-                    if(tmp!=null){
+                    if(tmp!=null && tmp.getCamp()!=Camp.DEAD){
                         res.add(tmp);
                     }
                 }
