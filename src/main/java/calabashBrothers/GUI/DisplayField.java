@@ -50,10 +50,6 @@ public class DisplayField implements Runnable, Callable<String> {
         DisplayField.maps = maps;
     }
 
-    public boolean getRunning() {
-        return Running;
-    }
-
     public static void setDisplayHz(int displayHz) {
         DISPLAY_HZ = displayHz;
     }
@@ -83,18 +79,6 @@ public class DisplayField implements Runnable, Callable<String> {
 
     public void setRecorder(ArrayList<Recorder> recorder) {
         this.recorder = recorder;
-    }
-
-    private void displaySleep(int ms){
-        try{
-            TimeUnit.MILLISECONDS.sleep(ms);
-        }catch (InterruptedException e){
-            System.out.println(e.toString());
-        }
-    }
-
-    public boolean isDisPlaying() {
-        return disPlaying;
     }
 
     public void setDisPlaying(boolean disPlaying) {
@@ -156,7 +140,7 @@ public class DisplayField implements Runnable, Callable<String> {
             synchronized (maps){
                 maps.showMaps();
                 if(firstDisplay){
-                    displaySleep(3);
+                    GUITimer.displaySleep(3);
                     firstDisplay = false;
                 }
             }
@@ -184,19 +168,19 @@ public class DisplayField implements Runnable, Callable<String> {
                     fightingEnd = true;
                 }
                 if(fightingEnd){
-                    displaySleep(5000);
+                    GUITimer.displaySleep(5000);
                     player.stop();
                 }
 
             }
-            displaySleep(DISPLAY_HZ);
+            GUITimer.displaySleep(DISPLAY_HZ);
         }
     }
 
     //回放
     void replay(){
         while (!Replaying){
-            displaySleep(500);
+            GUITimer.displaySleep(500);
             System.out.println("waiting for replay");
         }
         if(Replaying){
@@ -211,6 +195,7 @@ public class DisplayField implements Runnable, Callable<String> {
         display();
     }
 
+    //call方法
     public String call(){
         //等待外界的回放信号
         replay();

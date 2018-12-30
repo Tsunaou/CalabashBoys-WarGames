@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @ Author     ：Young
- * @ Description：用于展示战场
+ * @ Description：JavafxGUI框架交互的控制器
  */
 public class BattleFieldController implements Config{
 

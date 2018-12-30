@@ -11,11 +11,6 @@ import java.util.HashMap;
  * @ Description：战场上存在的生物映射（保存文件用）
  */
 
-//public enum CreatureIndex{
-//    ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,//葫芦娃
-//    GRANDPA,MONSTER,SNAKE,SCORPION
-//}
-
 public class CreatureMap{
 
     static HashMap<String, Creature> creatureMaps;//通过该表，可以得到生物种类和类的映射关系

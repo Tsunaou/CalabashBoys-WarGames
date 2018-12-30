@@ -19,6 +19,7 @@ public class RecorderSystem {
         this.window = window;
     }
 
+    //读档
     public ArrayList<Recorder>  openRecord(){
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("HULUWA files (*.huluwa)", "*.huluwa");
@@ -46,12 +47,8 @@ public class RecorderSystem {
         return  recorders;
     }
 
+    //存档
     public void saveRecord(ArrayList<Recorder> recorders){
-//        FileChooser fileChooser1 = new FileChooser();
-//        fileChooser1.setTitle("存档");
-//        System.out.println(recorders);
-//        File file = fileChooser1.showSaveDialog(window);
-//        System.out.println(file);
         File file = new File("record.huluwa");
 
         try{
